@@ -36,11 +36,38 @@ Bom, chega de enrolação. Vamos ao que interessa...
 
 \section{A linguagem onipresente}
 
+Um modelo é uma simplificação da realidade. O modelo do domíno de um sistema é a forma como entedemos a realidade de um dado negócio. Esse modelo é algo abstrato, que tem impacto em diversos artefatos concretos, como requisitos, diagramas, o código-fonte e a estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. E parte desse alinhamento diz respeito às palavras utilizadas. 
+
+Evans defende extensivamente ao longo do livro a utilização de uma \emph{linguagem onipresente} para falar do modelo e para se aplicar nos artefatos concretos. Assim, ocorre uma melhor assimilação dos desenvolvedores sobre o que dizem os especilistas dos negócios. Assim, fica evidente desvios que a arquitetura esteja tomando em relação ao negócio. A utilização de uma linguagem onipresente é uma ferramenta realmente poderosa.
+
 \section{Camadas de um software}
 
-Arquitetura hexagonal...
+As camadas de um software geralmente se resumem a interface, aplicativo, domínio e infra.
 
-\section{Padrões da camada do domínio}
+\begin{description}
+\item [Interface:]
+\item [Aplicativo:] não contém regras de negócio. Tende a ser bem magra. Essa camada utiliza a camada do domínio.
+\item [Domínio:] é o coração do sistema, onde estão as regras do negócio. É a parte do sistema onde menos os \emph{frameworks} e plataformas podem ajudar. É onde mais a criatividade e as capacidades de análise e design se fazem necessárias. E é nessa camada que o livro Domain-Driven Design é focado.
+\item [Infra:] ecursos técnicos como mensagens, persistência etc.
+\end{description}
+
+Muitas pessoas exaltam muito a importância da infra-estrutura na definição de arquitetura de um software. Alguns acham que a escolha do Sistem Gerenciador de Bancos de Dados é a mais importante. Algumas outras se degladiam pela escolha do \emph{framework} de desenvolvimento. Mas o Uncle Bob é bem feliz ao explicar como essas coisas na realidade importam muto pouco\footnote{http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html}. Assim, entendemos que o núcleo do sistema é composto pelas regras de negócio. Essas regras tendem a ser mais duradouras que as tecnologias empregadas. E são essas regras que, no fim, das contas, entregam valor ao negócio. Por isso a importância do estudo do DDD, que consiste no aprimoramento de nossa capacidade em melhor desenvolver essa cadama do domínio.
+
+Uncle bob também esclare como a camada de domínio não deve depender da camada de infra. O negócio não pode depender da tecnologia. Isso fica evidente na apresentação da arquitetura hexagonal\footnote{https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html}.
+
+\section{Elementos do domínio}
+
+entidade (tem identidade), objetos de valor e serviços.
+
+\section{Padrões do domínio}
+
+agregados, fábricas e repositórios.
+
+\section{Evolução do modelo do domínio}
+
+Refatortação constante.
+
+Oportunidades de avanço.
 
 \section{Arquitetura de larga escala}
 
