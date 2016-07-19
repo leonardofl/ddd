@@ -59,17 +59,47 @@ Uncle bob também esclare como a camada de domínio não deve depender da camada
 
 \section{Elementos do domínio}
 
-entidade (tem identidade), objetos de valor e serviços.
+Os elementos do domínio classificados por Evans são: entidades, objetos de valor e serviços.
 
-\section{Padrões do domínio}
+\begin{description}
+\item [Entidades] são identificáveis e possuem um ciclo de vida. 
+\item [Objetos de valor] são intercambiáveis (não possuem identidade) e devem ser imutáveis.
+\item [Serviços] acomodam operações que não cabem nas entidades. É preciso ter cuidado, porque existem serviços nas camadas de domínio, infra e aplicativo.
+\item [Módulos], também chamados de pacotes (no java), são agrupamentos de classes. Devem possuir significado no domínio, ou seja, a hierarquia de móduos deve refletir uma hierarquia do domíno.
+\end{description}
 
-agregados, fábricas e repositórios.
+Pg 107 crítica à separação entity vs BC... modelo anêmico... objects vs data structures
+
+\section{Padrões do ciclo de vida de um objeto do domínio}
+
+\begin{description}
+\item [agregados:] possui uma entidade e vários objetos d valor. Membros externos ao agregado acessam a entidade e não podem modificar diretamente os objetos d valor. Entidade garante as invariantes do grupo. Ex: carro vs penu. Ex: laudo vs {proprietario, veiculo vistoriado...}.
+\item [fábricas:] A função da fábrica é instanciar um objeto potencialmente complexo a partir dos dados. Fábrica não cuida de persistência. A fábrica pode instanciar um novo objeto ou reconstituir um objeto já existente a partir de seu formato serializado.
+\item [repositórios:] faz o CRUD do objeto. Interface do repositório é ligado ao modelo, e não à infra. O repositório usa um DAO para ter acesso a infra. Ou seja, no repositório ficam as regras de negócio de CRUD da entidade, não os mecanismos tecnológicos de persistência. Esses últimos ficam no DAO, que é da camada de infra.
+\end{description}
+
+Então um cenário típico de uso, para a criaçaõ de um novo objeto, fica assim:
+\begin{enumerate}
+\item Cliente pede pra fábrica criar objeto.
+\item Cliente pede pra inserir objeto no repositório.
+\item Repositório pede pro DAO perssitir o objeto.
+\end{enumerate}
+
+Já para a reconstituição de um objeto, podemos ter:
+
+\begin{enumerate}
+fig 6.22
+\end{enumerate}
+
+Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhes da tecnologia. Assim, tudo o que o domínio sabe é que a entidade está sendo salva em algum lugar, mas sem nenhuma dependência com alguma tecnologia específica.
 
 \section{Evolução do modelo do domínio}
 
 Refatortação constante.
 
 Oportunidades de avanço.
+
+\section{Outras dicas de design}
 
 \section{Arquitetura de larga escala}
 
