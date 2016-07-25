@@ -3,7 +3,9 @@
 \usepackage[brazil]{babel}
 \usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} % para as margens
 \usepackage{graphicx} % para as figuras  
-\usepackage{alltt}                   
+\usepackage{alltt}      
+
+\newcommand{\citacao}[1]{\emph{``#1''}}
 
 \title{Resumo do livro ``Domain-Driven Design''}
 \author{Leonardo Leite}
@@ -15,6 +17,7 @@
 \textbf{Atenção: } este documento trata-se ainda de uma versão em desenvolvimento.
 
 \section{Introdução}
+
 
 Este documento é um resumo do livro ``Domain-Driven Design, Atacando as Complexidades no Coração do Software'', escrito por Eric Evans em 2003. Os objetivos deste resumo são:
 
@@ -32,11 +35,28 @@ Minha impressão geral sobre o livro: gostei bastante da mentalidade do autor, b
 
 Outra consideração bem interessante é, pra mim, foi bem positivo ter demorado pra ler esse livro. Já tinha ouvido falar do livro há alguns anos, mas somente agora finalmente o priorizei. E isso foi bom porque a experiência recente que eu tive desenvolvendo um sistema com um complicado modelo de domínio me ajudou bastante a ler o livro com melhor proveito. Outros sistemas em que trabalhara antes não tinham um modelo de domínio assim tão complexo. Ler o livro e comparar o que o autor descreve com suas próprias experiências é de grande valor para uma melhor leitura do livro. Dessa forma, dou a ousada sugestão de que se você ainda é um desenvolvedor iniciante leia apenas um livro básico (ou mesmo esse resumo) sobre o assunto e espere alguns anos até ler o livro Domain-Driven Design.
 
+\citacao{A principal finalidade de um software é servir aos usuários. Mas, primeiro, esse mesmo software tem que servir aos desenvolvedores}.
+
+Obs: \citacao{trechos nesta formatação são citações diretas do livro}.
+
 Bom, chega de enrolação. Vamos ao que interessa...
 
-\section{A linguagem onipresente}
+\section{O domínio de um software e seu modelo}
 
-Um modelo é uma simplificação da realidade. O modelo do domíno de um sistema é a forma como entedemos a realidade de um dado negócio. Esse modelo é algo abstrato, que tem impacto em diversos artefatos concretos, como requisitos, diagramas, o código-fonte e a estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. E parte desse alinhamento diz respeito às palavras utilizadas. 
+
+Um modelo é uma simplificação da realidade. O modelo do domínio de um sistema é a forma como entendemos a realidade de um dado negócio. Esse modelo é algo abstrato, que tem impacto em diversos artefatos concretos, como requisitos, diagramas, o código-fonte e a estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. E parte desse alinhamento diz respeito às palavras utilizadas. 
+
+* Normalmente o refinamento do modelo, do design e da implementação devem caminhar de mãos dadas em um processo de desenvolvimento iterativo.
+
+* Normalmente à medida que o modelo está sendo refinado para suportar melhor o design, ele também deve ser refinado para refletir uma nova visão com relação ao domínio.
+
+O modelo de domínio (expresso também no design) é a base do sistema.
+
+\citacao{Um modelo profundo proporciona uma expressão lúcida das principais preocupações dos especialistas do domínio e de seu conhecimento mais relevante, descartando, ao mesmo tempo, os aspectos superficiais do domínio}.
+
+Conceitos presentes em versões iniciais do modelo podem ser descartadas conforme o modelo amadurece.
+
+\section{A linguagem onipresente}
 
 Evans defende extensivamente ao longo do livro a utilização de uma \emph{linguagem onipresente} para falar do modelo e para se aplicar nos artefatos concretos. Assim, ocorre uma melhor assimilação dos desenvolvedores sobre o que dizem os especilistas dos negócios. Assim, fica evidente desvios que a arquitetura esteja tomando em relação ao negócio. A utilização de uma linguagem onipresente é uma ferramenta realmente poderosa.
 
@@ -65,8 +85,10 @@ Os elementos do domínio classificados por Evans são: entidades, objetos de val
 \item [Entidades] são identificáveis e possuem um ciclo de vida. 
 \item [Objetos de valor] são intercambiáveis (não possuem identidade) e devem ser imutáveis.
 \item [Serviços] acomodam operações que não cabem nas entidades. É preciso ter cuidado, porque existem serviços nas camadas de domínio, infra e aplicativo.
-\item [Módulos], também chamados de pacotes (no java), são agrupamentos de classes. Devem possuir significado no domínio, ou seja, a hierarquia de móduos deve refletir uma hierarquia do domíno.
+\item [Módulos], também chamados de pacotes (no java), são agrupamentos de classes. Devem possuir significado no domínio, ou seja, a hierarquia de módulos deve refletir uma hierarquia do domínio.
 \end{description}
+
+* Separar pacotes por conceitos do domínio, e não pelas camadas técnicas. Ex ruim: entidades, valores, serviços. Ex bom: cliente, cobrança, transporte de cargas.
 
 Pg 107 crítica à separação entity vs BC... modelo anêmico... objects vs data structures
 
@@ -82,24 +104,74 @@ Então um cenário típico de uso, para a criaçaõ de um novo objeto, fica assi
 \begin{enumerate}
 \item Cliente pede pra fábrica criar objeto.
 \item Cliente pede pra inserir objeto no repositório.
-\item Repositório pede pro DAO perssitir o objeto.
+\item Repositório pede pro DAO persitir o objeto.
 \end{enumerate}
 
 Já para a reconstituição de um objeto, podemos ter:
 
 \begin{enumerate}
-fig 6.22
+\item Cliente pede objeto para repositório.
+\item Repositório acessa o banco via DAO para obter dados persistidos do objeto.
+\item Repositório repassa dados persistidos do objeto a fábrica.
+\item Fábrica reconsrói objeto, que é devolvido ao repositório, que é devolvido ao cliente para a edição.
 \end{enumerate}
 
-Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhes da tecnologia. Assim, tudo o que o domínio sabe é que a entidade está sendo salva em algum lugar, mas sem nenhuma dependência com alguma tecnologia específica.
+A complexidade desses passos decorre do caso mais complicado no qual a reconstituição do objeto não se resume simplesmente a restaurar os dados persistidos no banco. O que é o banco guarda, pode ser apenas parte do que é objeto é em tempo de execução. Esse é um dos motivos pelo qual é muito arriscado permitir que o sistema de uma aplicação tenha acesso direto ao banco de dados de outra aplicação. Por mais que impor algumas restrições no modelo de dados do banco possa ser uma ideia em caráter de garantia extra, essas regras podem não dar conta de manter complexas restrições semânticas decorrentes do domínio.
+
+Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhes da tecnologia. Assim, tudo o que o domínio sabe é que a entidade está sendo persistida em algum lugar, mas sem nenhuma dependência com alguma tecnologia específica. Alguns programadores leval isso mais a sério ao criar interfaces para os DAOs, fazerem o domínio depender da interface, e aí criar implementações acopladas ao banco, mas que são desconehcidas do domínio. Essa complicação faz sentido, mas eu acredito que esse trabalho possa ser evitado enquanto se mantenha primeira ideia do parágrafo: a interface do DAO (i.e. nome de classe e assinaturas dos métodos) não pode conter detalhes específicos de tecnologia.
 
 \section{Evolução do modelo do domínio}
 
-Refatortação constante.
+Refatoração constante.
 
-Oportunidades de avanço.
+Evoluções passo a passo são as vezes interrompidas por uma oportunidade de avanço onde as coisas mudam bastante de uma só vez. São as oportunidades de avanço: 
+
+* Busca por um modelo mais profundo.
+
+* Evitar regras de casos particulares.
+
+* As vezes há uma oportunidade de avanço para um modelo mais profundo que requer uma grande refatoração, daquelas que é difícil concluir sem deixar o código quebrado por um tempo. Mas vale a pena.
+
+* Refatoração técnica (melhora o design, mas sem alterar o modelo do domínio) vs refatoração para refinamento do modelo. A primeira é algo mecânico, a segunda é mais subjetiva.
+
+
 
 \section{Outras dicas de design}
+
+* Associações bidirecionais (e referências circulares) são problemáticas para o design (mas as vezes necessárias).
+
+* A direção da travessia muitas vezes capta uma visão aprofundada do domínio, aprofundando o próprio modelo. 
+
+* Explicite os conceitos implícitos.
+
+* É preciso muita iteração e conversa com os especialistas do domínio. Rabiscar diagramas no quadro branco ajuda bastante. 
+
+* Acertar o design de primeira não existe.
+
+* Ler livros sobre o domínio pode ajudar também.
+
+* Outros conceitos além de substantivos/verbos para fazerem parte do modelo: restrições, processos de negócios e especificações.
+
+Uso de especificações...
+
+* Interface reveladora de intenções. Diminuir esforço cognitivo do desenvolvedor. Se a mente do desenvolvedor está transbordando de detalhes internos sobre o objeto utilizado, sua mente não está limpa para resolver o problema. Se é preciso considerar a implementação de um componente para utilizá-lo, o valor do encapsulamento é perdido. Utilizar bons nomes é um caminho para resolver esses problemas. TDD (testes de unidade antes da implementação) também ajuda.
+
+* Funções (devolvem valores) vs comandos (têm efeitos colaterais). Um método deve ser ou uma função ou um comando, não misture os dois. Prefira funções. Comandos devem ser bem simples. Cálculos complexos ficam melhor em objetos de valor (não em entidades).
+
+* Se esforce para reduzir as dependência entre classes e módulos (diminuir o acoplamento). Se possível, crie classes autônomas, que podem ser estudadas por si só. Isso diminui o esforço cognitivo em compreender/usar/testar os elementos do domínio. Obs: dependências visíveis na interface são piores que dependências internas; dependências com elementos fora do módulo são piores que dependência com elementos dentro do módulo.
+
+* Se possível, crie operação *fechadas* sobre elas mesmas. Ou seja, a operação retorna um objeto do mesmo tipo que o objeto que contém a operação (x.inverse()). Também ajuda: retorno do mesmo tipo que o argumento.
+
+* O autor vê com certa reserva abordagens como design declarativos, sistemas baseados em regras e linguagens declarativas. São interessantes, mas há limitações. O autor encoraja a utilização dos padrões apresentados ao longo do capítulo para que o código de objetos tenha um estilo mais declarativo. Essa discussão é bem parecido com a questão se fazer BDD com ou sem a linguagem de alto nível, mais próxima da linguagem natural.
+
+* Como estilo declarativo o autor dá alguns exemplos de combinações de especificações usando operadores lógicos. Assim chegamos a códigos como "Spec both = ventilated.and(armored)", onde ventilated e armored são Spec. No geral, creio que padrões de "linguagens fluentes" ajudem nesse propósito. Em geral esses padrões são construídos que retornam o próprio objeto invocado (ex: design pattern Builder). Pode-se até chegar ao ponto de verificar se uma spec contém outra spec: manSpec.inclui(mortalSpec).
+
+Depois de uma discussão sobre alterar o modelo, pode ser legal esperar alguns dias pra discutir novamente, com a ideia mais madura, antes de de fato por a mão na massa e alterar o design ("dormir com o problema" ajuda).
+
+Refatore quando:
+* O design não expressa o entendimento atual da equipe sobre o domínio.
+* Conceitos importantes estão implícitos no design.
+* Você vê uma oportunidade de tornar mais flexível alguma parte importante do design.
 
 \section{Arquitetura de larga escala}
 
