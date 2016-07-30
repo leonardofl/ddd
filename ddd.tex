@@ -2,8 +2,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
 \usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} % para as margens
-\usepackage{graphicx} % para as figuras  
-\usepackage{alltt}      
+\usepackage{graphicx} 
+\usepackage{alltt} 
+\usepackage[hidelinks]{hyperref} 
+
 
 \newcommand{\citacao}[1]{\emph{``#1''}}
 
@@ -37,7 +39,7 @@ Outra consideração bem interessante é, pra mim, foi bem positivo ter demorado
 
 \citacao{A principal finalidade de um software é servir aos usuários. Mas, primeiro, esse mesmo software tem que servir aos desenvolvedores}.
 
-Antes de chegar ao que interessa, mais uma consideração. A abordagem de DDD, tal como apresentada no livro, é intimamente ligada à orientação a objetos (OO). Caso você ainda não domine a OO em profundamente, não se preocupe, estudar DDD é até uma boa maneira de reforçar o aprendizado em OO. Mas um alerta se faz necessário. Muitas pessoas ainda vendem a ideia de que o foco principal da OO consiste no mapeamento de entidades do mundo real para o código e a utilização de encapsulamento, herança e polimorfismo. Embora todas essas coisas estejam inclusas na OO, é mais útil considerar que o foco do OO é a decomposição do código de um sistema em unidades coesas e fracamente acopladas. Essas unidade são tanto as pequena unidades (classes), quanto as grandes unidades (pacotes). Uma consequência almejada dessa decomposição é que a manutenção do sistema fica facilitada, pois é possível encontrar rapidamente o ponto a ser alterado e a mesma alteração não precisa ser repetida em diversos pontos do código.
+Antes de chegar ao que interessa, mais uma consideração. A abordagem de DDD, tal como apresentada no livro, é intimamente ligada à orientação a objetos (OO). Caso você ainda não domine a OO em profundamente, não se preocupe, estudar DDD é até uma boa maneira de reforçar o aprendizado em OO. Mas um alerta se faz necessário. Muitas pessoas ainda vendem a ideia de que o foco principal da OO consiste no mapeamento de entidades do mundo real para o código e a utilização de encapsulamento, herança e polimorfismo. Embora todas essas coisas estejam inclusas na OO, é mais útil considerar que o foco do OO é a decomposição do código de um sistema em unidades coesas e fracamente acopladas. Essas unidade são tanto as pequena unidades (classes), quanto as grandes unidades (pacotes). Uma consequência almejada dessa decomposição é que a manutenção do sistema fica facilitada, pois é possível encontrar rapidamente o ponto a ser alterado e a mesma alteração não precisa ser repetida em diversos pontos do código. Um ótimo livro que ajuda a passar essa ideia sobre a OO é o ``Orientação a Objetos e SOLID para Ninjas''~\cite{Aniche2015Ninjas}.
 
 Obs: \citacao{trechos nesta formatação são citações diretas do livro}.
 
@@ -64,6 +66,9 @@ Conceitos presentes em versões iniciais do modelo podem ser descartadas conform
 Evans defende extensivamente ao longo do livro a utilização de uma \emph{linguagem onipresente} para falar do modelo e para se aplicar nos artefatos concretos. Assim, ocorre uma melhor assimilação dos desenvolvedores sobre o que dizem os especilistas dos negócios. Assim, fica evidente desvios que a arquitetura esteja tomando em relação ao negócio. A utilização de uma linguagem onipresente é uma ferramenta realmente poderosa.
 
 Um dos lugares em que a linguagem onipresente deve estar presente são os diagramas do sistema. O autor enfatiza o como sessões em que desenvolvedores e analistas de negócios se juntam para rabiscar diagramas pode ser proveitosa. Nessa toada, uma coisa que o autor valoriza são os diagramas informais. Se prender às normas restritas da UML pode não ser o ideal para passar uma certa mensagem. Afinal, um bom diagrama é sobre comunicar sucintamente algo à equipe. Do meu ponto de vista, acho aborrecedor com as diversas ferramentas UML por aí que inserem restrições diversas (ex: homens palitos só podem ser inseridos em diagramas de caso de uso).
+
+Então falar rapidamente da linguagem onipresente parece diminuir a importância dela. Falo rapidamente porque a ideia é simples. Mas cabe destacar que é a ideia mais importante do livro. Em todo capítulo o autor aproveita para reforçar o assunto, aplicando-o nos mais diferentes contextos, seja na produção de código, seja na conversa com so especialistas.
+
 
 \section{Camadas de um software}
 
@@ -180,8 +185,19 @@ Design e emergência... citar caindo na real.
 
 \section{Arquitetura de larga escala}
 
+Os capítulos finais do livro (cap 14 em diante) apresentam algumas ideias interessantes sobre como lidar com grandes sistemas de software, nos quais fica difícil manter um único modelo de domínio para todas as funcionalidades. Um caso particular bastante abordado pelo o autor é a integração com sistemas legados.
+
+Embora tais técnicas sejam interessantes, não são tão essenciais quanto o início do livro, pois se trata de técnicas que não se aplicam a todos os projetos. Por isso, dependendo da sua situação (experiência e tipos de projeto com o qual trabalha), pode ser uma opção interessante em um primeiro momento ler o livro apenas até o capítulo 13. Mas vou dar aqui uma breve explanada sobre essas ideias finais do livro.
+
 \section{Objetos não são estruturas de dados}
 
-Modelo anêmico (post caelumn)
+Minha primeira impressão sobre DDD é de que se trata de evitar os chamadas modelos anêmicos, nos quais o modelo são basicamente estruturas de dados persistidas no banco. Tem um post do blog da Caelumn que fala sobre isso\footnote{\url{http://blog.caelum.com.br/o-que-e-modelo-anemico-e-por-que-fugir-dele/}}. Mas para mim só essa visão era difícil de aceitar, por causa do capítulo 6 ``Objects and Data Structures'' do livro Clean Code~\cite{Bob2008Clean}. Nesse capítulo o autor argumenta que as estruturas de dados tem seu lugar e que não se faz um programa 100\% OO. O importante seria não misturar as coisas. Então, pensando no princípio da responsabilidade única, no qual já tenho uma estrutura de dados com as informações de uma entidade, e que essa estrutura tem como responsabilidade principal ser algo a ser persistido no banco, parece talvez incorreto acrescentar comportamentos a essa classe. Eu escrevi um post mais detalhado sobre essa questão no blog do PoliGNU\footnote{\url{http://polignu.org/artigo/clean-code-objetos-n\%C3\%A3o-s\%C3\%A3o-estruturas-de-dados}}.
+
+Outra questão que me deixa em dúvida é como o padrão active record entra nessa história...
+
+
+\bibliographystyle{plain}
+\bibliography{referencias}  
+
 
 \end{document}
