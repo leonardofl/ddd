@@ -47,19 +47,13 @@ Bom, chega de enrolação. Vamos ao que interessa...
 
 \section{O modelo do domínio de um software}
 
-O domínio de um software diz respeito... regras de negócio... o domínio é a realidade...
+O \emph{domínio} de um software é o assunto relacionado às atividades desempenhadas pelos usuários desse software. Exemplos de domínios são compra de passagens aéreas, gestão de pessoas, tradução de texto para outras línguas, o processo legislativo, segurança veicular, previsão do tempo etc.
 
-Um modelo é uma simplificação da realidade. O modelo do domínio de um sistema é a forma como entendemos a realidade de um dado negócio. Esse modelo é algo abstrato, que tem impacto em diversos artefatos concretos, como requisitos, diagramas, o código-fonte e a estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. E parte desse alinhamento diz respeito às palavras utilizadas. 
+Para desenvolvermos um software que auxilie atividades humanas em um dado domínio, precisamos de um \emph{modelo} desse domínio que seja útil à criação desse software. \citacao{Cada modelo representa algum aspecto da realidade com uma ideia que seja de interesse. Um modelo é uma simplificação. Ele é uma interpretação da realidade que destaca os aspectos relevantes para resolver o problema que se tem em mãos ignorando os detalhes estranhos}. Ao ignorar seletivamente esses detalhes, modelos nos ajudam a tratar a sobrecarga de volume e complexidade das informações relacionadas ao domínio. 
 
-* Normalmente o refinamento do modelo, do design e da implementação devem caminhar de mãos dadas em um processo de desenvolvimento iterativo.
+Diagramas não são o modelo. O modelo é uma abstração que se reflete em diversos artefatos concretos, como requisitos, diagramas, código-fonte e estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. Esse alinhamento diz respeito até mesmo às palavras utilizadas na comunicação entre os membros do time (incluindo desenvolvedores, analistas de negócio e cliente).
 
-* Normalmente à medida que o modelo está sendo refinado para suportar melhor o design, ele também deve ser refinado para refletir uma nova visão com relação ao domínio.
-
-O modelo de domínio (expresso também no design) é a base do sistema.
-
-\citacao{Um modelo profundo proporciona uma expressão lúcida das principais preocupações dos especialistas do domínio e de seu conhecimento mais relevante, descartando, ao mesmo tempo, os aspectos superficiais do domínio}.
-
-Conceitos presentes em versões iniciais do modelo podem ser descartadas conforme o modelo amadurece.
+O modelo do domínio não pode ser facilmente definido antes da construção do software, pois o processo de desenvolvimento traz um grande aprendizado para equipe sobre o domínio. Esse aprendizado deve se refletir em evoluções incrementais do modelo ao longo do desenvolvimento. E enquanto o modelo evolui, assim os diagramas, código e demais artefatos também evoluem para acompanhar a evolução do modelo. 
 
 \section{A linguagem onipresente}
 
