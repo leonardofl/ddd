@@ -1,13 +1,15 @@
-\documentclass[a4paper, 12pt]{article}
+	\documentclass[a4paper, 12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
 \usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} % para as margens
 \usepackage{graphicx} 
 \usepackage{alltt} 
 \usepackage[hidelinks]{hyperref} 
+\usepackage{xspace}
 
 
 \newcommand{\citacao}[1]{\emph{``#1''}}
+\newcommand{\lgg}{linguagem onipresente\xspace}
 
 \title{Resumo do livro ``Domain-Driven Design''}
 \author{Leonardo Leite}
@@ -49,19 +51,23 @@ Bom, chega de enrolação. Vamos ao que interessa...
 
 O \emph{domínio} de um software é o assunto relacionado às atividades desempenhadas pelos usuários desse software. Exemplos de domínios são compra de passagens aéreas, gestão de pessoas, tradução de texto para outras línguas, o processo legislativo, segurança veicular, previsão do tempo etc.
 
-Para desenvolvermos um software que auxilie atividades humanas em um dado domínio, precisamos de um \emph{modelo} desse domínio que seja útil à criação desse software. \citacao{Cada modelo representa algum aspecto da realidade com uma ideia que seja de interesse. Um modelo é uma simplificação. Ele é uma interpretação da realidade que destaca os aspectos relevantes para resolver o problema que se tem em mãos ignorando os detalhes estranhos}. Ao ignorar seletivamente esses detalhes, modelos nos ajudam a tratar a sobrecarga de volume e complexidade das informações relacionadas ao domínio. 
+Para desenvolvermos um software que auxilie as atividades humanas em um dado domínio, precisamos de um \emph{modelo} desse domínio que seja útil à criação desse software. \citacao{Cada modelo representa algum aspecto da realidade com uma ideia que seja de interesse. Um modelo é uma simplificação. Ele é uma interpretação da realidade que destaca os aspectos relevantes para resolver o problema que se tem em mãos ignorando os detalhes estranhos}. Ao ignorar seletivamente esses detalhes, modelos nos ajudam a tratar a sobrecarga de volume e complexidade das informações relacionadas ao domínio. 
 
 Diagramas não são o modelo. O modelo é uma abstração que se reflete em diversos artefatos concretos, como requisitos, diagramas, código-fonte e estrutura do banco de dados. Todos esses artefatos devem estar alinhados com o modelo do domínio. Esse alinhamento diz respeito até mesmo às palavras utilizadas na comunicação entre os membros do time (incluindo desenvolvedores, analistas de negócio e cliente).
 
-O modelo do domínio não pode ser facilmente definido antes da construção do software, pois o processo de desenvolvimento traz um grande aprendizado para equipe sobre o domínio. Esse aprendizado deve se refletir em evoluções incrementais do modelo ao longo do desenvolvimento. E enquanto o modelo evolui, assim os diagramas, código e demais artefatos também evoluem para acompanhar a evolução do modelo. 
+O modelo do domínio não pode ser facilmente definido antes da construção do software. O processo de desenvolvimento traz um grande aprendizado para a equipe sobre o domínio. Esse aprendizado deve se refletir em evoluções incrementais do modelo ao longo do desenvolvimento. E enquanto o modelo evolui, os demais artefatos (diagramas, código etc.) também devem evoluir para acompanhar a evolução do modelo. 
 
 \section{A linguagem onipresente}
 
-Evans defende extensivamente ao longo do livro a utilização de uma \emph{linguagem onipresente} para falar do modelo e para se aplicar nos artefatos concretos. Assim, ocorre uma melhor assimilação dos desenvolvedores sobre o que dizem os especilistas dos negócios. Assim, fica evidente desvios que a arquitetura esteja tomando em relação ao negócio. A utilização de uma linguagem onipresente é uma ferramenta realmente poderosa.
+A situação típica é de que o time de desenvolvimento não esteja habituada ao domínio do software a ser construído. Especialistas do domínio possuem jargões que os desenvolvedores não conhecem. Assim surgem complicações na comunicação entre desenvolvedores e especialistas do domínio. Até mesmo entre os próprios desenvolvedores pode haver confusão, pois cada um pode criar um entendimento diferente sobre o domínio em sua cabeça.
 
-Um dos lugares em que a linguagem onipresente deve estar presente são os diagramas do sistema. O autor enfatiza o como sessões em que desenvolvedores e analistas de negócios se juntam para rabiscar diagramas pode ser proveitosa. Nessa toada, uma coisa que o autor valoriza são os diagramas informais. Se prender às normas restritas da UML pode não ser o ideal para passar uma certa mensagem. Afinal, um bom diagrama é sobre comunicar sucintamente algo à equipe. Do meu ponto de vista, acho aborrecedor com as diversas ferramentas UML por aí que inserem restrições diversas (ex: homens palitos só podem ser inseridos em diagramas de caso de uso).
+Para fortalecer a comunicação dos envolvidos em um projeto de software e garantir a precisão do modelo, Evans defende extensivamente ao longo do livro a utilização de uma \emph{linguagem onipresente}. Essa linguagem onipresente deve ser utilizada na comunicação oral e escrita do time, além de ser utilizada nos diagramas, código-fonte etc. Assim, a \lgg faz a ligação entre a comunicação do time e a implementação do software.
 
-Então falar rapidamente da linguagem onipresente parece diminuir a importância dela. Falo rapidamente porque a ideia é simples. Mas cabe destacar que é a ideia mais importante do livro. Em todo capítulo o autor aproveita para reforçar o assunto, aplicando-o nos mais diferentes contextos, seja na produção de código, seja na conversa com so especialistas.
+Lacunas na linguagem onipresente evidenciam a falta de um conceito no modelo. Palavras estranhas podem evidenciar imprecisões do modelo ou divergências entre a implementação e os objetivos do negócio. Mudanças na linguagem onipresente são mudanças no modelo. Assim ela deve ser mantida e zelada por todo o time. Especialistas do domínio devem impedir a existência de termos inapropriados para o domínio, enquanto que desenvolvedores devem impedir ambiguidades e inconsistências.
+
+Na comunicação diária, tanto especialistas quando desenvolvedores ainda utilizarão termos fora da linguagem onipresente. Esses termos podem ser, por exemplo, termos técnicos ligados à implementação do software, ou conceitos mais avançados do negócio, não necessários à implementação do software. Tais termos devem ser complementares à linguagem onipresente, e não conflitantes com a linguagem onipresente.
+
+Embora seja rápido e fácil falar sobre a \lgg, ela é uma ideia central ao longo do livro. Em praticamente todos os capítulos, o autor aproveita para reforçar o assunto, aplicando-o nos mais diferentes contextos, seja na produção de código, seja na conversa com os especialistas.
 
 
 \section{Camadas de um software}
@@ -124,6 +130,9 @@ Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhe
 
 \section{Evolução do modelo do domínio}
 
+
+
+
 Refatoração constante.
 
 Evoluções passo a passo são as vezes interrompidas por uma oportunidade de avanço onde as coisas mudam bastante de uma só vez. São as oportunidades de avanço: 
@@ -136,7 +145,7 @@ Evoluções passo a passo são as vezes interrompidas por uma oportunidade de av
 
 * Refatoração técnica (melhora o design, mas sem alterar o modelo do domínio) vs refatoração para refinamento do modelo. A primeira é algo mecânico, a segunda é mais subjetiva.
 
-
+O autor enfatiza o como sessões em que desenvolvedores e analistas de negócios se juntam para rabiscar diagramas pode ser proveitosa (para evoluir o modelo). Nessa toada, uma coisa que o autor valoriza são os diagramas informais. Se prender às normas restritas da UML pode não ser o ideal para passar uma certa mensagem. Afinal, um bom diagrama é sobre comunicar sucintamente algo à equipe. Do meu ponto de vista, acho aborrecedor com as diversas ferramentas UML por aí que inserem restrições diversas (ex: homens palitos só podem ser inseridos em diagramas de caso de uso).
 
 \section{Outras dicas de design}
 
