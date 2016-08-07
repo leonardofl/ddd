@@ -1,4 +1,4 @@
-	\documentclass[a4paper, 12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
 \usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} % para as margens
@@ -95,8 +95,11 @@ Muitas pessoas exaltam a importância da infra-estrutura na definição de arqui
 Os elementos do domínio classificados por Evans são: entidades, objetos de valor e serviços.
 
 \begin{description}
-\item [Entidades] são identificáveis e possuem um ciclo de vida. 
-\item [Objetos de valor] são intercambiáveis (não possuem identidade) e devem ser imutáveis.
+
+\item [Entidades] representam algo com identidade e com uma continuidade rastreável por diferentes estados e até diferentes implementações. A definição de um objeto como esse não está em seus valores, pois objetos diferentes com valores iguais ainda devem ser distinguíveis. A definição da identidade é a principal característica de uma entidade. Um exemplo de entidade é um veículo que deve ser identificável em diferentes partes do sistema como correspondente a um determinado veículo único existente no mundo real. Dois veículos Fox, da Volkswagen, ambos de cor preta e demais características de fábrica idênticas ainda são veículos distintos.
+
+\item [Objetos de valor] descrevem o estado de alguma coisa. Por exemplo, um veículo pode ter uma cor, que é descrita por uma combinação numérica RGB. Dois veículos podem ter cores idênticas, mas não precisamos nos preocupar com que os dois objetos veículos apontem exatamente para o mesmo objeto cor. Ou seja, nesse caso a cor não possui uma identidade. Ela é meramente um valor. Para reforçar: enquanto uma entidade define \emph{quem} ela é, um objeto de valor define \emph{o que} ele é. Objetos de valor devem ser imutáveis. Assim, um veículo pode mudar de cor, mas não é a cor do veículo que se altera. Ou seja, o objeto veículo passa a apontar para um novo objeto cor e o antigo objeto cor é esquecido. A imutabilidade traz várias vantagens ao design de software~\cite{Bloch2008}, e podemos aproveitar essas vantagens nos objetos de valor.
+
 \item [Serviços] acomodam operações que não cabem nas entidades. É preciso ter cuidado, porque existem serviços nas camadas de domínio, infra e aplicativo.
 \item [Módulos], também chamados de pacotes (no java), são agrupamentos de classes. Devem possuir significado no domínio, ou seja, a hierarquia de módulos deve refletir uma hierarquia do domínio.
 \end{description}
@@ -204,7 +207,7 @@ Minha primeira impressão sobre DDD é de que se trata de evitar os chamadas mod
 Outra questão que me deixa em dúvida é como o padrão active record entra nessa história...
 
 
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
 \bibliography{referencias}  
 
 
