@@ -72,18 +72,23 @@ Embora seja rápido e fácil falar sobre a \lgg, ela é uma ideia central ao lon
 
 \section{Camadas de um software}
 
-As camadas de um software geralmente se resumem a interface, aplicativo, domínio e infra.
+O primeiro passo para um design dirigido pelo domínio é o isolamento da lógica do negócio de outras características que o software deve implementar. Isso é feito com a separação do software em camadas. Assim temos uma camada do domínio que fica desacoplada do restante do sistema. Isso facilita a manutenção, pois podemos criar designs mais coesivos e identificar rapidamente os pontos de mudança no software. Além disso, o isolamento das regras de negócio potencializa o reuso de código, pois a mesma regra de negócio pode ser reaproveitada em um aplicativo móvel ou por um web service, por exemplo.
+
+As camadas podem ser classificadas em interface, aplicativo, domínio e infra.
 
 \begin{description}
-\item [Interface:]
-\item [Aplicativo:] não contém regras de negócio. Tende a ser bem magra. Essa camada utiliza a camada do domínio.
-\item [Domínio:] é o coração do sistema, onde estão as regras do negócio. É a parte do sistema onde menos os \emph{frameworks} e plataformas podem ajudar. É onde mais a criatividade e as capacidades de análise e design se fazem necessárias. E é nessa camada que o livro Domain-Driven Design é focado.
-\item [Infra:] ecursos técnicos como mensagens, persistência etc.
+\item [Interface:] interage com o usuário, coletando entradas e exibindo saídas. Esse usuário pode ser tanto uma pessoa quanto outro sistema.
+\item [Aplicativo:] implementa as funcionalidades disponíveis para o usuário. Essa camada tende a ser bem magra e apenas dirige a camada de domínio para que a funcionalidade seja entregue.
+\item [Domínio:] é o coração do sistema, onde estão os conceitos, regras e estado do negócio. É a parte do sistema onde menos os \emph{frameworks} e plataformas podem ajudar. É onde mais a criatividade e as capacidades de análise e design se fazem necessárias. E é nessa camada que o livro Domain-Driven Design é focado.
+\item [Infra:] recursos técnicos como persistência, troca de mensagens etc.
 \end{description}
 
-Muitas pessoas exaltam muito a importância da infra-estrutura na definição de arquitetura de um software. Alguns acham que a escolha do Sistem Gerenciador de Bancos de Dados é a mais importante. Algumas outras se degladiam pela escolha do \emph{framework} de desenvolvimento. Mas o Uncle Bob é bem feliz ao explicar como essas coisas na realidade importam muto pouco\footnote{http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html}. Assim, entendemos que o núcleo do sistema é composto pelas regras de negócio. Essas regras tendem a ser mais duradouras que as tecnologias empregadas. E são essas regras que, no fim, das contas, entregam valor ao negócio. Por isso a importância do estudo do DDD, que consiste no aprimoramento de nossa capacidade em melhor desenvolver essa cadama do domínio.
+\citacao{O princípio essencial é de que qualquer elemento de uma camada depende somente dos outros elementos da mesma camada ou dos elementos das camadas ``abaixo'' dela. A comunicação para cima deve passar por algum tipo de mecanismo indireto}. Ou seja, o importante aqui é que a camada de domínio seja auto-contida e não dependa de nenhuma das outras camadas do software.
 
-Uncle bob também esclare como a camada de domínio não deve depender da camada de infra. O negócio não pode depender da tecnologia. Isso fica evidente na apresentação da arquitetura hexagonal\footnote{https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html}.
+A aplicação do princípio da inversão de dependência para possibilitar que a camada de domínio não dependa de outras camadas é descrito nesses dois posts do Uncle Bob: ``The Clean Architecture''\footnote{https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html} e ``A Little Architecture''\footnote{http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html}. Citando um trechinho: \citacao{A web é um detalhe. O banco é um detalhe. Nós deixamos essas coisas do lado de fora, onde elas não podem trazer muito dano.}
+
+Muitas pessoas exaltam a importância da infra-estrutura na definição de arquitetura de um software. Alguns acham que a escolha do Sistem Gerenciador de Bancos de Dados é a mais importante. Algumas outras se degladiam pela escolha do \emph{framework} de desenvolvimento. Mas o post ``A Little Architecture'' esclarece como essas coisas na realidade importam muto pouco. As regras de negócio tendem a ser mais duradouras que as tecnologias empregadas. E queremos ser capazes de facilmente substitui tecnologias obsoletas se preciso. Entendemos que as regras de negócio são a parte mais valiosa do sistema. Por isso a importância do estudo do DDD, que consiste no aprimoramento de nossa capacidade em escrever a camada do domínio.
+
 
 \section{Elementos do domínio}
 
