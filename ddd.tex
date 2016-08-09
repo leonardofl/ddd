@@ -100,13 +100,27 @@ Os elementos do domínio classificados por Evans são: entidades, objetos de val
 
 \item [Objetos de valor] descrevem o estado de alguma coisa. Por exemplo, um veículo pode ter uma cor, que é descrita por uma combinação numérica RGB. Dois veículos podem ter cores idênticas, mas não precisamos nos preocupar com que os dois objetos veículos apontem exatamente para o mesmo objeto cor. Ou seja, nesse caso a cor não possui uma identidade. Ela é meramente um valor. Para reforçar: enquanto uma entidade define \emph{quem} ela é, um objeto de valor define \emph{o que} ele é. Objetos de valor devem ser imutáveis. Assim, um veículo pode mudar de cor, mas não é a cor do veículo que se altera. Ou seja, o objeto veículo passa a apontar para um novo objeto cor e o antigo objeto cor é esquecido. A imutabilidade traz várias vantagens ao design de software~\cite{Bloch2008}, e podemos aproveitar essas vantagens nos objetos de valor.
 
-\item [Serviços] acomodam operações que não cabem nas entidades. É preciso ter cuidado, porque existem serviços nas camadas de domínio, infra e aplicativo.
-\item [Módulos], também chamados de pacotes (no java), são agrupamentos de classes. Devem possuir significado no domínio, ou seja, a hierarquia de módulos deve refletir uma hierarquia do domínio.
+\item [Serviços] são operações oferecidas como interfaces, isoladas no modelo e que não possuem estado. Acomodam operações que possuem significado no domínio, mas que não se encaixam em entidades ou objetos de valor. Serviços devem ser criados com parcimônia, pois a utilização de serviços deixa o software menos orientado a objeto e mais procedural. Mas às vezes são convenientes para que regras complicadas de orquestração dos elementos do domínio não vazem para a camada de aplicação. Um exemplo seria a transferência de dinheiro entre contas bancárias, caso a operação ``transferência'' não se encaixe adequadamente no objeto ``conta''. Serviços existem em todas as camadas do software. Um exemplo de serviço de infra é o envio de e-mail. Mas é preciso ter os serviços de cada camada bem caracterizados e separados.
+
+\item [Módulos,] chamados de pacotes na linguagem Java, são agrupamentos de classes. Devem possuir significado no domínio. A hierarquia de módulos deve refletir uma hierarquia do domínio. O nome de um módulo deve ser expressivo e pertencer à linguagem onipresente. A coesão e acoplamento dos módulos também deve ser controlada. A separação dos módulos deve isolar conceitos para facilitar o entendimento dos mesmos. A refatoração da estrutura de módulos é mais complicada do que a refatoração de classes, mas não menos importante.
+
 \end{description}
 
-* Separar pacotes por conceitos do domínio, e não pelas camadas técnicas. Ex ruim: entidades, valores, serviços. Ex bom: cliente, cobrança, transporte de cargas.
+\section{Entidades e suas regras de negócio}
 
-Pg 107 crítica à separação entity vs BC... modelo anêmico... objects vs data structures
+Uma prática adotada por muitos desenvolvedores é a separação das definições de dados e comportamentos de uma entidade em objetos separados. Em algumas nomenclaturas seriam as \emph{entities} e os \emph{BCs} (\emph{business classes}). A página 107 do livro inicia uma discussão importante ao criticar essa separação. Quando possível, deixe o comportamento de uma entidade no mesmo objeto que define seus dados. Assim, Evans sugere que as regras de negócio que ficam isoladas nos BCs passem a integrar as entidades. Além disso, regras do BC que sejam na verdade regras que manipulem o ciclo de vida da entidade (criação, alteração e deleção) podem se acomodar melhor em fábricas ou repositórios (ver próxima seção).
+
+Essa separação de entidade com dados de um lado e BCs com regras de negócio do outro gera o que é chamado por aí de modelo anêmico. Alguns textos de rápida leitura que corroboram com o desencorajamento do modelo anêmico:  ``O que é Modelo Anêmico? E por que fugir dele?''\footnote{\url{http://blog.caelum.com.br/o-que-e-modelo-anemico-e-por-que-fugir-dele/}} e ``AnemicDomainModel''\footnote{\url{http://www.martinfowler.com/bliki/AnemicDomainModel.html}}.
+
+Mas a adoção dessa prática deve possuir alguns cuidados, como não criar acoplamentos indesejados. Exemplo: \emph{empresa.possuiFuncionarioProcessado()} parece uma interessante adesão a um modelo não anêmico. Mas se a princípio o modelo não exige que o objeto ``empresa'' tenha conhecimento de objetos de ``processos'', esse método pode não ser uma boa ideia. Nesse caso, melhor talvez seria algo como \emph{processoRepositorio.possuiFuncionarioProcessado(empresa)}.
+
+Contudo, ainda há controvérsias... No livro Clean Code, Uncle Bob faz uma distinção entre objetos e estruturas de dados~\cite{Bob2008Clean}. Ele considera que no padrão \emph{active record}\footnote{\url{https://pt.wikipedia.org/wiki/Active_record}}, os modelos (classes que fazem a ponte com o banco de dados para a persistência das entidades) devem ser simples estruturas de dados. Ele critica a colocação de regras de negócio nessas estruturas de dados e termina concluindo que \citacao{a solução é, claro, tratar o Active Record como uma estrutura de dados e criar objetos separados que contenham as regras de negócio e que escondam seus dados (que são provavelmente apenas instâncias do Active Record)}. Alguns trechos a mais desse capítulo do Clean Code podem ser encontrados no post ``Clean Code: objetos não são estruturas de dados!''\footnote{\url{http://polignu.org/artigo/clean-code-objetos-n\%C3\%A3o-s\%C3\%A3o-estruturas-de-dados}} 
+
+Essa solução no fundo vai de encontro à recomendação geral de não expor publicamente todos os dados de uma entidade. Mas forçar essa separação da entidade em classes diferentes parece um tanto burocrático e cair no caso criticado por Evans, no qual há uma separação da entidade conceitual em diferentes objetos, sendo um para manter a estrutura de dados e o outro as regras de negócio da entidade.
+
+Para concluir a controvérsia, minha posição neste momento é de que a postura mais equilibrada parece ser implementar suas entidades como classes contendo os dados da entidade nos atributos e as regras de negócio em métodos públicos, mas evitando a publicização desnecessária dos dados da entidade. Em Java isso seria não criar \emph{getters} e \emph{setters} desnecessariamente. Uma posição similar pode ser depreendida do post ``Como não aprender Java e Orientação a Objetos: getters e setters''\footnote{\url{http://blog.caelum.com.br/nao-aprender-oo-getters-e-setters/}}. Mas essa é uma discussão pra lá de complicada!
+
+
 
 \section{Padrões do ciclo de vida de um objeto do domínio}
 
@@ -136,9 +150,11 @@ A complexidade desses passos decorre do caso mais complicado no qual a reconstit
 
 Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhes da tecnologia. Assim, tudo o que o domínio sabe é que a entidade está sendo persistida em algum lugar, mas sem nenhuma dependência com alguma tecnologia específica. Alguns programadores leval isso mais a sério ao criar interfaces para os DAOs, fazerem o domínio depender da interface, e aí criar implementações acopladas ao banco, mas que são desconehcidas do domínio. Essa complicação faz sentido, mas eu acredito que esse trabalho possa ser evitado enquanto se mantenha primeira ideia do parágrafo: a interface do DAO (i.e. nome de classe e assinaturas dos métodos) não pode conter detalhes específicos de tecnologia.
 
+
+
+
+
 \section{Evolução do modelo do domínio}
-
-
 
 
 Refatoração constante.
@@ -200,11 +216,7 @@ Os capítulos finais do livro (cap 14 em diante) apresentam algumas ideias inter
 
 Embora tais técnicas sejam interessantes, não são tão essenciais quanto o início do livro, pois se trata de técnicas que não se aplicam a todos os projetos. Por isso, dependendo da sua situação (experiência e tipos de projeto com o qual trabalha), pode ser uma opção interessante em um primeiro momento ler o livro apenas até o capítulo 13. Mas vou dar aqui uma breve explanada sobre essas ideias finais do livro.
 
-\section{Objetos não são estruturas de dados}
 
-Minha primeira impressão sobre DDD é de que se trata de evitar os chamadas modelos anêmicos, nos quais o modelo são basicamente estruturas de dados persistidas no banco. Tem um post do blog da Caelumn que fala sobre isso\footnote{\url{http://blog.caelum.com.br/o-que-e-modelo-anemico-e-por-que-fugir-dele/}}. Mas para mim só essa visão era difícil de aceitar, por causa do capítulo 6 ``Objects and Data Structures'' do livro Clean Code~\cite{Bob2008Clean}. Nesse capítulo o autor argumenta que as estruturas de dados tem seu lugar e que não se faz um programa 100\% OO. O importante seria não misturar as coisas. Então, pensando no princípio da responsabilidade única, no qual já tenho uma estrutura de dados com as informações de uma entidade, e que essa estrutura tem como responsabilidade principal ser algo a ser persistido no banco, parece talvez incorreto acrescentar comportamentos a essa classe. Eu escrevi um post mais detalhado sobre essa questão no blog do PoliGNU\footnote{\url{http://polignu.org/artigo/clean-code-objetos-n\%C3\%A3o-s\%C3\%A3o-estruturas-de-dados}}.
-
-Outra questão que me deixa em dúvida é como o padrão active record entra nessa história...
 
 
 \bibliographystyle{apalike}
