@@ -45,6 +45,8 @@ Antes de chegar ao que interessa, mais uma consideração. A abordagem de DDD, t
 
 Obs: \citacao{trechos nesta formatação são citações diretas do livro}.
 
+Obs: citações não são tão e somente pra justificar sentenças, mas mais pra indicar mais leituras ao leitor...
+
 Bom, chega de enrolação. Vamos ao que interessa...
 
 \section{O modelo do domínio de um software}
@@ -163,20 +165,15 @@ O DAO é o objeto focado na tecnologia de banco de dados, mas isso é um aspecto
 
 \section{Evolução do modelo do domínio}
 
+O modelo do domínio não nasce pronto. Conforme os desenvolvedores avançam na implementação, eles aprendem e assimilam muito conhecimento sobre o domínio. E esse conhecimento deve ser utilizado para incrementar o domínio. Assim, Evans defende constantemente a refatoração contínua do software. Não só a refatoração técnica que melhora o design das classes, mas a refatoração para que o modelo melhor expresse conceitos e soluções no domínio.
 
-Refatoração constante.
+Por vezes os desenvolvedores podem notar indícios de que o modelo deve ser refinado. Algumas situações: pessoas diferentes utilizam nomes diferentes para a mesma coisa (talvez conceitos devam ser uniformizados); a descrição de algum relacionamento é muito complicada (talvez esteja faltando um novo conceito); novos conceitos que surgem não se encaixam com um dos conceitos já estabelecidos (talvez algum conceito velho deva ser descartado).
 
-Evoluções passo a passo são as vezes interrompidas por uma oportunidade de avanço onde as coisas mudam bastante de uma só vez. São as oportunidades de avanço: 
+Um bom momento para detectar refinamentos necessários ao modelo é durante sessões de discussão entre desenvolvedores e pessoas do negócio quando ambos podem interagir por meio de diagramas rabiscados em uma lousa. Nesse sentido, Evans valoriza bastante a utilização de diagramas informais. O ponto central sobre diagramas é comunicação. A UML é um bom ponto de partida, mas se prender às suas regras restritas traz mais prejuízo que benefício. Eu particularmente me aborreço com ferramentas que restringem como você pode desenhar seus diagramas só para não desrespeitar a UML.
 
-* Busca por um modelo mais profundo.
+Pequenas evoluções incrementais são as vezes interrompidas por uma \emph{oportunidade de avanço}, que leva a um \emph{modelo mais profundo} por meio de alterações abruptas que se propagam por várias partes do sistema. Embora esse tipo de refatoração seja complicada, um modelo mais profundo pode trazer vantagens ao aumentar sua versatilidade e seu poder explicativo. 
 
-* Evitar regras de casos particulares.
-
-* As vezes há uma oportunidade de avanço para um modelo mais profundo que requer uma grande refatoração, daquelas que é difícil concluir sem deixar o código quebrado por um tempo. Mas vale a pena.
-
-* Refatoração técnica (melhora o design, mas sem alterar o modelo do domínio) vs refatoração para refinamento do modelo. A primeira é algo mecânico, a segunda é mais subjetiva.
-
-O autor enfatiza o como sessões em que desenvolvedores e analistas de negócios se juntam para rabiscar diagramas pode ser proveitosa (para evoluir o modelo). Nessa toada, uma coisa que o autor valoriza são os diagramas informais. Se prender às normas restritas da UML pode não ser o ideal para passar uma certa mensagem. Afinal, um bom diagrama é sobre comunicar sucintamente algo à equipe. Do meu ponto de vista, acho aborrecedor com as diversas ferramentas UML por aí que inserem restrições diversas (ex: homens palitos só podem ser inseridos em diagramas de caso de uso).
+Um modelo mais profundo consegue resolver situações particulares com regras gerais. Quando um sistema tem muito código dedicado a casos particulares, isso é um sinal de que o modelo não tem força suficiente. Um modelo bem desenvolvido oferece ao software a propriedade da \emph{emergência}. A emergência significa que comportamentos complexos benéficos emergem (de forma não antecipada) a partir de regras simples contidas nas unidades do sistema~\cite{37signals2006GettingReal}. A busca por conceitos elegantes que evitem a utilização de regras complexas é um dos benefícios esperados das oportunidades de avanço. Porém, uma oportunidade de avanço não é algo planejado, mas um evento que ocorre de tempos em tempos. E é preciso estar atento para quando o momento chegar.
 
 \section{Outras dicas de design}
 
