@@ -126,6 +126,7 @@ Para concluir a controvérsia, minha posição neste momento é de que a postura
 
 Nesta seção apresentamos os padrões que auxiliam no controle do ciclo de vida de objetos: como eles nascem, são persistidos, recuperados, excluídos e como a integridade dos objetos e de seus relacionamentos é mantida.
 
+
 \begin{description}
 
 \item [Agregados] possuem uma entidade raiz e vários objetos de valor. Um exemplo é uma entidade carro que possui quatro objetos pneus. Embora os pneus sejam objetos separados, o conjunto do carro mais os quatro objetos pneus formam uma unidade coesa que sempre permanece junta, à o que chamamos de agregado. Como no exemplo os pneus não tem razão de ser fora do carro, esses pneus podem ser meros objetos de valor. Membros externos ao agregado acessam somente a entidade raiz e não podem modificar diretamente os objetos de valor. Assim, a entidade raiz garante as invariantes do grupo. No nosso exemplo, uma invariante do agregado a ser observada é a existência de exatamente quatro pneus. Outro exemplo de agregado: uma empresa pode ser uma entidade. Mas para a completa descrição da empresa podemos necessitar de um objeto endereço, que seria um objeto de valor fazendo parte do agregado da empresa.
@@ -133,33 +134,31 @@ Nesta seção apresentamos os padrões que auxiliam no controle do ciclo de vida
 \item [Fábricas] encapsulam processos complexos de criação de objetos a partir de um conjunto de dados. A fábrica não cuida de persistência. A fábrica pode instanciar um novo objeto ou reconstituir um objeto já existente a partir de seu formato serializado. É comum que a fábrica crie todo um agregado completo.
 Existem diversos padrões de projetos sobre como criar fábricas. O padrão \emph{builder} é um exemplo bem legal~\cite{Bloch2008Builder}. Algumas vantagens da utilização de fábricas podem ser encontradas no livro Effective Java~\cite{Bloch2008Factory}. 
 
-\item [Repositórios] oferecem a abstração de coleção de um conjunto de objetos ou agregados do mesmo tipo. Assim, clientes podem inserir, editar, excluir e consultar objetos de uma determinada coleção. Repositórios devem ser construídos apenas para as raízes dos agregados. As consultas podem ser feitas na medida para evitar o vazamento de encapsulamento de detalhes para o cliente, o que seria mais propenso a acontecer caso o cliente acessasse diretamente o banco de dados (via DAO). Condições de negócio para a inserção/alteração/exclusão do objeto devem ser garantidas pelo repositório. A implementação do repositório é uma implementação de negócio, não devendo se acoplar com a tecnologia de persistência (ex: banco de dados). Por isso, em última instância, o repositório delega uma tarefa ao DAO. Exemplo: uma empresa com alguma irregularidade não pode ser inserida na coleção de empresas participantes de uma licitação. Essa é uma regra do repositório, e não do DAO. O DAO deve se preocupar somente com a tecnologia da infraestrutura.
-
+\item [Repositórios] oferecem a abstração de coleção de um conjunto de objetos ou agregados do mesmo tipo. Assim, clientes\footnote{Quando um objeto A utiliza outro objeto B, dizemos que o objeto A é o \emph{cliente} dessa relação.} podem inserir, editar, excluir e consultar objetos de uma determinada coleção. Repositórios devem ser construídos apenas para as raízes dos agregados. As consultas podem ser feitas na medida para evitar o vazamento de encapsulamento de detalhes para o cliente, o que seria mais propenso a acontecer caso o cliente acessasse diretamente o banco de dados (via DAO). Condições de negócio para a inserção/alteração/exclusão do objeto devem ser garantidas pelo repositório. A implementação do repositório é uma implementação de negócio, não devendo se acoplar com a tecnologia de persistência (ex: banco de dados). Por isso, em última instância, o repositório delega uma tarefa ao DAO. Exemplo: uma empresa com alguma irregularidade não pode ser inserida na coleção de empresas participantes de uma licitação. Essa é uma regra do repositório, e não do DAO. O DAO deve se preocupar somente com a tecnologia da infraestrutura.
 
 \end{description}
 
-Então um cenário típico de uso, para a criaçaõ de um novo objeto, fica assim:
+Utilizando os padrões apresentados, eis um cenário típico de criação de um novo objeto:
+
 \begin{enumerate}
-\item Cliente pede pra fábrica criar objeto.
-\item Cliente pede pra inserir objeto no repositório.
-\item Repositório pede pro DAO persitir o objeto.
+\item Cliente pede à fábrica para criar um objeto.
+\item Cliente recebe o objeto criado pela fábrica.
+\item Cliente pede ao repositório para salvar objeto criado.
+\item Repositório pede ao DAO para persistir dados do objeto no banco de dados.
 \end{enumerate}
 
-Já para a reconstituição de um objeto, podemos ter:
+Já para a recuperação de um objeto podemos ter:
 
 \begin{enumerate}
-\item Cliente pede objeto para repositório.
+\item Cliente pede o objeto ao repositório.
 \item Repositório acessa o banco via DAO para obter dados persistidos do objeto.
-\item Repositório repassa dados persistidos do objeto a fábrica.
-\item Fábrica reconsrói objeto, que é devolvido ao repositório, que é devolvido ao cliente para a edição.
+\item Repositório repassa dados persistidos do objeto à fábrica.
+\item Fábrica reconstrói o objeto, que é devolvido ao repositório, que é devolvido ao cliente.
 \end{enumerate}
 
-A complexidade desses passos decorre do caso mais complicado no qual a reconstituição do objeto não se resume simplesmente a restaurar os dados persistidos no banco. O que é o banco guarda, pode ser apenas parte do que é objeto é em tempo de execução. Esse é um dos motivos pelo qual é muito arriscado permitir que o sistema de uma aplicação tenha acesso direto ao banco de dados de outra aplicação. Por mais que impor algumas restrições no modelo de dados do banco possa ser uma ideia em caráter de garantia extra, essas regras podem não dar conta de manter complexas restrições semânticas decorrentes do domínio.
+A complexidade desses passos vale a pena no caso mais complicado, no qual a reconstituição do objeto não se resume simplesmente a restaurar os dados persistidos no banco. O que o banco guarda pode ser apenas parte do que o objeto é em tempo de execução. Esse é um dos motivos pelo qual é muito arriscado permitir que um sistema tenha acesso direto ao banco de dados de outro sistema. Impor restrições no modelo de dados do banco pode nos dar algumas garantias. Porém, essas regras no banco podem não ser suficientes para manter complexas restrições semânticas decorrentes de regras do domínio.
 
-Detalhe importante: mesmo a interface que o DAO fornece não deve conter detalhes da tecnologia. Assim, tudo o que o domínio sabe é que a entidade está sendo persistida em algum lugar, mas sem nenhuma dependência com alguma tecnologia específica. Alguns programadores leval isso mais a sério ao criar interfaces para os DAOs, fazerem o domínio depender da interface, e aí criar implementações acopladas ao banco, mas que são desconehcidas do domínio. Essa complicação faz sentido, mas eu acredito que esse trabalho possa ser evitado enquanto se mantenha primeira ideia do parágrafo: a interface do DAO (i.e. nome de classe e assinaturas dos métodos) não pode conter detalhes específicos de tecnologia.
-
-
-
+O DAO é o objeto focado na tecnologia de banco de dados, mas isso é um aspecto apenas de sua implementação. A interface do DAO não deve conter detalhes da tecnologia. Tudo o que o domínio sabe é que o objeto está sendo persistido em algum lugar. O domínio permanece totalmente ignorante quanto a tecnologia utilizada. Ou seja, a interface do DAO deve ser definida do ponto de vista do negócio. Lembre-se: o domínio não deve depender de detalhes (o banco é um detalhe). São são os detalhes (DAOs) que devem depender do domínio. Idealmente temos então a interface do DAO sendo definida dentro do domínio e sua implementação na camada de infra. Em Java podemos separar esses dois artefatos (interface e implementação) nessas diferentes camadas. Mas como na maioria dos casos o DAO sempre vai ter uma única implementação, uma abordagem mais pragmática é fazer uma única classe DAO na camada de infra, sem o artefato de interface. Contudo, as assinaturas dos métodos e o nome do DAO continuam sendo sua interface, e essa interface continua devendo ser definida em termos do domínio.
 
 
 \section{Evolução do modelo do domínio}
