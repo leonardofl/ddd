@@ -6,8 +6,9 @@
 \usepackage{alltt} 
 \usepackage[hidelinks]{hyperref} 
 \usepackage{xspace}
+\usepackage{listings}
 
-
+\newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\citacao}[1]{\emph{``#1''}}
 \newcommand{\lgg}{linguagem onipresente\xspace}
 
@@ -20,7 +21,9 @@
 
 \textbf{Atenção: } este documento trata-se ainda de uma versão em desenvolvimento.
 
+
 \section{Introdução}
+
 
 
 Este documento é um resumo do livro ``Domain-Driven Design, Atacando as Complexidades no Coração do Software'', escrito por Eric Evans em 2003. Os objetivos deste resumo são:
@@ -167,7 +170,7 @@ O DAO é o objeto focado na tecnologia de banco de dados, mas isso é um aspecto
 
 O modelo do domínio não nasce pronto. Conforme os desenvolvedores avançam na implementação, eles aprendem e assimilam muito conhecimento sobre o domínio. E esse conhecimento deve ser utilizado para incrementar o domínio. Assim, Evans defende constantemente a refatoração contínua do software. Não só a refatoração técnica que melhora o design das classes, mas a refatoração para que o modelo melhor expresse conceitos e soluções no domínio.
 
-Por vezes os desenvolvedores podem notar indícios de que o modelo deve ser refinado. Algumas situações: pessoas diferentes utilizam nomes diferentes para a mesma coisa (talvez conceitos devam ser uniformizados); a descrição de algum relacionamento é muito complicada (talvez esteja faltando um novo conceito); novos conceitos que surgem não se encaixam com um dos conceitos já estabelecidos (talvez algum conceito velho deva ser descartado).
+Por vezes os desenvolvedores podem notar indícios de que o modelo deve ser refinado. Algumas situações: pessoas diferentes utilizam nomes diferentes para a mesma coisa (talvez conceitos devam ser uniformizados); a descrição de algum relacionamento é muito complicada (talvez esteja faltando um novo conceito); novos conceitos que surgem não se encaixam com um dos conceitos já estabelecidos (talvez algum conceito velho deva ser descartado); percebe-se que o design não expressa o entendimento atual da equipe sobre o domínio (conceitos do software não coincidem com os conceitos mentais das pessoas).
 
 Um bom momento para detectar refinamentos necessários ao modelo é durante sessões de discussão entre desenvolvedores e pessoas do negócio quando ambos podem interagir por meio de diagramas rabiscados em uma lousa. Nesse sentido, Evans valoriza bastante a utilização de diagramas informais. O ponto central sobre diagramas é comunicação. A UML é um bom ponto de partida, mas se prender às suas regras restritas traz mais prejuízo que benefício. Eu particularmente me aborreço com ferramentas que restringem como você pode desenhar seus diagramas só para não desrespeitar a UML.
 
@@ -175,46 +178,52 @@ Pequenas evoluções incrementais são as vezes interrompidas por uma \emph{opor
 
 Um modelo mais profundo consegue resolver situações particulares com regras gerais. Quando um sistema tem muito código dedicado a casos particulares, isso é um sinal de que o modelo não tem força suficiente. Um modelo bem desenvolvido oferece ao software a propriedade da \emph{emergência}. A emergência significa que comportamentos complexos benéficos emergem (de forma não antecipada) a partir de regras simples contidas nas unidades do sistema~\cite{37signals2006GettingReal}. A busca por conceitos elegantes que evitem a utilização de regras complexas é um dos benefícios esperados das oportunidades de avanço. Porém, uma oportunidade de avanço não é algo planejado, mas um evento que ocorre de tempos em tempos. E é preciso estar atento para quando o momento chegar.
 
-\section{Outras dicas de design}
+Mas antes de arregaçar as mangas e se aventurar em alterações radicais de seu design, mais um conselho. Após uma discussão sobre uma oportunidade de avanço, espere alguns dias e discuta novamente a proposta. Esse tempo ajuda a deixar a ideia mais madura e dar confiança ao time de que esse é o melhor caminho. ``Dormir com o problema'' ajuda.
 
-* Cada caso é um caso. O livro dá várias recomendações. Mas o próprio autor em diversos momentos explicita que uma abordagem pragmática sempre deve ser levada em consideração ao se observar o contexto da situação.
 
-* Associações bidirecionais (e referências circulares) são problemáticas para o design (mas as vezes necessárias).
+\section{Dicas de design}
 
-* A direção da travessia muitas vezes capta uma visão aprofundada do domínio, aprofundando o próprio modelo. 
+\begin{itemize}
 
-* Explicite os conceitos implícitos.
+\item Cada caso é um caso. O próprio autor em diversos momentos toma uma postura bem pragmática, incentivando que a equipe tome as decisões considerando o contexto e ponderando os compromissos.
 
-* É preciso muita iteração e conversa com os especialistas do domínio. Rabiscar diagramas no quadro branco ajuda bastante. 
+\item Associações bidirecionais e referências circulares são problemáticas para o design. Ás vezes são necessárias, mas tente evitá-las.
 
-* Acertar o design de primeira não existe.
+\item A direção da associação muitas vezes capta uma visão aprofundada do domínio. Exemplo: é o veículo que possui as rodas, e não o contrário.
 
-* Ler livros sobre o domínio pode ajudar também.
+\item Explicite os conceitos implícitos.
 
-* Outros conceitos além de substantivos/verbos para fazerem parte do modelo: restrições, processos de negócios e especificações.
+\item É preciso muita iteração e conversa com os especialistas do domínio. Rabiscar diagramas no quadro branco ajuda bastante. 
 
-Uso de especificações...
+\item Acertar o design de primeira não existe.
 
-* Interface reveladora de intenções. Diminuir esforço cognitivo do desenvolvedor. Se a mente do desenvolvedor está transbordando de detalhes internos sobre o objeto utilizado, sua mente não está limpa para resolver o problema. Se é preciso considerar a implementação de um componente para utilizá-lo, o valor do encapsulamento é perdido. Utilizar bons nomes é um caminho para resolver esses problemas. TDD (testes de unidade antes da implementação) também ajuda.
+\item Ler livros sobre o domínio também pode ajudar.
 
-* Funções (devolvem valores) vs comandos (têm efeitos colaterais). Um método deve ser ou uma função ou um comando, não misture os dois. Prefira funções. Comandos devem ser bem simples. Cálculos complexos ficam melhor em objetos de valor (não em entidades).
+\item Outros conceitos além de substantivos e verbos (classes e métodos) podem fazer parte do modelo: restrições, processos de negócios e especificações.
 
-* Se esforce para reduzir as dependência entre classes e módulos (diminuir o acoplamento). Se possível, crie classes autônomas, que podem ser estudadas por si só. Isso diminui o esforço cognitivo em compreender/usar/testar os elementos do domínio. Obs: dependências visíveis na interface são piores que dependências internas; dependências com elementos fora do módulo são piores que dependência com elementos dentro do módulo.
+\item TODO restrições
 
-* Se possível, crie operação *fechadas* sobre elas mesmas. Ou seja, a operação retorna um objeto do mesmo tipo que o objeto que contém a operação (x.inverse()). Também ajuda: retorno do mesmo tipo que o argumento.
+\item TODO processos de negócio
 
-* O autor vê com certa reserva abordagens como design declarativos, sistemas baseados em regras e linguagens declarativas. São interessantes, mas há limitações. O autor encoraja a utilização dos padrões apresentados ao longo do capítulo para que o código de objetos tenha um estilo mais declarativo. Essa discussão é bem parecido com a questão se fazer BDD com ou sem a linguagem de alto nível, mais próxima da linguagem natural.
+\item TODO Uso de especificações...
 
-* Como estilo declarativo o autor dá alguns exemplos de combinações de especificações usando operadores lógicos. Assim chegamos a códigos como "Spec both = ventilated.and(armored)", onde ventilated e armored são Spec. No geral, creio que padrões de "linguagens fluentes" ajudem nesse propósito. Em geral esses padrões são construídos que retornam o próprio objeto invocado (ex: design pattern Builder). Pode-se até chegar ao ponto de verificar se uma spec contém outra spec: manSpec.inclui(mortalSpec).
+\item Use \emph{interfaces reveladoras de intenções} para diminuir esforço cognitivo do desenvolvedor. Para utilizar um objeto não deve ser necessário entender sua implementação, mas apenas sua interface. Utilizar bons nomes é um caminho para resolver esses problemas. Desenvolvimento orientado por testes (TDD) também ajuda a definir interfaces mais claras e focadas no cliente.
 
-Depois de uma discussão sobre alterar o modelo, pode ser legal esperar alguns dias pra discutir novamente, com a ideia mais madura, antes de de fato por a mão na massa e alterar o design ("dormir com o problema" ajuda).
+\item \emph{Funções} devolvem valores, enquanto \emph{comandos} têm efeitos colaterais. Um método deve ser ou uma função ou um comando. Não misture os dois. Prefira funções. Comandos devem ser bem simples. Cálculos complexos ficam melhor em objetos de valor em vez de entidades.
 
-Refatore quando:
-* O design não expressa o entendimento atual da equipe sobre o domínio.
-* Conceitos importantes estão implícitos no design.
-* Você vê uma oportunidade de tornar mais flexível alguma parte importante do design.
+\item Se possível, crie funções \emph{fechadas} sobre elas mesmas. Ou seja, a função retorna um objeto do mesmo tipo que o objeto que contém a função. Exemplo: \code{x.inverse()} retorna um número real a partir de outro número real. Se o retorno for do mesmo tipo que o argumento da função também já ajuda. Exemplo: \code{Math.inverse(x)}.
 
-Design e emergência... citar caindo na real.
+\item Se esforce para reduzir as dependência entre classes e módulos (diminuir o acoplamento). Se possível, crie classes autônomas, que podem ser estudadas por si só. Isso diminui o esforço cognitivo em compreender/usar/testar os elementos do domínio. Dependências na interface são piores que dependências internas; dependências com elementos fora do módulo são piores que dependência com elementos dentro do módulo.
+
+\item Evans vê com certa reserva abordagens como design declarativos, sistemas baseados em regras e linguagens declarativas. São interessantes, mas há limitações. O autor encoraja a utilização dos padrões apresentados ao longo do capítulo para que o próprio código orientado a objetos tenha um estilo mais declarativo. 
+
+\item Uma disputa similar sobre paradigmas exóticos ocorre sobre a utilização de linguagem natural para a especificação de testes de software. Alguns autores defendem a utilização da própria linguagem de propósito geral (ex: Java) com sentenças cuidadosamente criadas em um estilo mais declarativo para expressar os requisitos do software em testes automatizados~\cite{Freeman2009Tests}.
+
+\item Especificações combinadas com operadores lógicos podem dar um estilo declarativo ao código. Sendo \emph{Spec} uma especificação de um contêiner de transporte, podemos ter: \code{Spec both = ventilated.and(armored)}, sendo os objetos envolvidos do tipo \code{Spec}. Podemos também testar se \code{umaSpec.inclui(outraSpec)}. 
+
+\item Um estilo declarativo bem popular hoje em dia é a chamada \emph{interface fluente}\footnote{\url{http://martinfowler.com/bliki/FluentInterface.html}}. Podemos encontrar um exemplo na biblioteca Mockito, utilizada para a criação de mocks em testes de unidade: \code{when(object.do()).thenReturn(someThing)}. O próprio padrão \emph{builder} é um exemplo de interface fluente.
+
+\end{itemize}
 
 \section{Arquitetura de larga escala}
 
