@@ -8,11 +8,13 @@
 \usepackage{xspace}
 \usepackage{listings}
 
+\hyphenation{booleano}
+
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\citacao}[1]{\emph{``#1''}}
 \newcommand{\lgg}{linguagem onipresente\xspace}
 
-\title{Resumo do livro ``Domain-Driven Design''}
+\title{Notas sobre o livro ``Domain-Driven Design''}
 \author{Leonardo Leite}
 
 \begin{document}
@@ -201,15 +203,13 @@ Mas antes de arregaçar as mangas e se aventurar em alterações radicais de seu
 
 \item Outros conceitos além de substantivos e verbos (classes e métodos) podem fazer parte do modelo: restrições, processos de negócios e especificações.
 
-\item Objetos e agregados devem manter invariantes, que são restrições sobre seus atributos. Explicite as restrições extraindo a lógica de restrição para um método dedicado a isso. Há também casos para extrair a restrição para uma nova classe: a lógica de restrição é muito complexa; a lógica de restrição apresente dependências estranhas ao objeto original; a mesma restrição aparece em classes diferentes.
+\item Objetos e agregados devem manter invariantes, que são \emph{restrições} sobre seus atributos. Explicite as restrições extraindo a lógica de restrição para um método dedicado a isso. Há também casos para extrair a restrição para uma nova classe: a lógica de restrição é muito complexa; a lógica de restrição apresente dependências estranhas ao objeto original; a mesma restrição aparece em classes diferentes. Um exemplo de restrição modelada em uma classe especializada é uma \code{política de overbooking}, que é utilizada para manter uma restrição entre as associações de um objeto de \code{viagem} para vários objetos de \code{carga} considerando os atributos \code{viagem.capacidade} e \code{carga.tamanho}.
 
-\item Serviços do domínio podem encapsular procedimentos que façam sentido do ponto de vista do negócio. Além disso, existem processos mais complexos, no qual uma determinada entidade passa por etapas de um longo processo para atingir um objetivo. Um exemplo comum é a emissão de documentos, que exige etapas como fornecimento de dados, pagamento e coleta do documento. Nesses casos, modelos baseados em máquinas de estado são úteis. Um padrão de projeto que pode ajudar é o \emph{state}~\cite{Freeman2004Patterns}.
+\item Serviços do domínio podem encapsular procedimentos que façam sentido do ponto de vista do negócio. Além disso, existem \emph{processos} mais complexos, no qual uma determinada entidade passa por etapas de um longo processo para atingir um objetivo. Um exemplo comum é a emissão de documentos, que exige etapas como fornecimento de dados, pagamento e coleta do documento. Nesses casos, modelos baseados em máquinas de estado são úteis. Um padrão de projeto que pode ajudar é o \emph{state}~\cite{Freeman2004Patterns}.
 
+\item \emph{Especificações} utilizam regras complexas para avaliar um objeto e retornam um booleano. Com regras simples poderíamos determinar se uma \code{fatura} está vencida com o método \code{fatura.vencida()}. Mas caso estas regras se tornem muito complexas ou criem dependências estranhas à classe \code{Fatura}, podemos extrair a lógica de avaliação do vencimento para uma nova classe. Para avaliar o vencimento da fatura teríamos então \code{especificacaoDeFatura.estaVencida(fatura)}, sendo que é \code{EspecificacaoDeFatura} que depende de \code{Fatura}, e não ao contrário. A especificação é um mero objeto de valor que é criado e utilizado quando necessário, sendo logo depois descartado.
 
-
-\item TODO Uso de especificações...
-
-
+\item Para obter uma coleção de objetos que respeite uma determinada especificação, a princípio seria interessante desacoplar a especificação do repositório. Mas está aí um caso no qual o desempenho pode ser um fator decisivo para que o repositório conheça as regras da especificação, de forma a termos uma consulta no banco que já recupera somente os objetos de interesse.
 
 \item Quando aplicável, utilize \emph{asserções} para garantir o estado do objeto após determinada operação. Na prática, essas asserções são implementadas nos testes de unidade.
 
