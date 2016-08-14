@@ -13,6 +13,7 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\citacao}[1]{\emph{``#1''}}
 \newcommand{\lgg}{linguagem onipresente\xspace}
+\newcommand{\ddd}{\emph{Domain Driven Design}\xspace}
 
 \title{Notas sobre o livro ``Domain-Driven Design''}
 \author{Leonardo Leite}
@@ -21,12 +22,13 @@
 
 \maketitle
 
+\begin{abstract}
 \textbf{Atenção: } este documento trata-se ainda de uma versão em desenvolvimento.
+\end{abstract}
+
 
 
 \section{Introdução}
-
-
 
 Este documento é um resumo do livro ``Domain-Driven Design, Atacando as Complexidades no Coração do Software'', escrito por Eric Evans em 2003. Os objetivos deste resumo são:
 
@@ -229,13 +231,41 @@ Mas antes de arregaçar as mangas e se aventurar em alterações radicais de seu
 
 \item Um estilo declarativo bem popular hoje em dia é a chamada \emph{interface fluente}\footnote{\url{http://martinfowler.com/bliki/FluentInterface.html}}. Podemos encontrar um exemplo na biblioteca Mockito, utilizada para a criação de mocks em testes de unidade: \code{when(object.do()).thenReturn(someThing)}. O próprio padrão \emph{builder} é um exemplo de interface fluente.
 
+\item Lembre-se: softwares não são somente para usuários. Eles também são para desenvolvedores, que devem manter o código.
+
+
+
 \end{itemize}
 
-\section{Arquitetura de larga escala}
+\section{Sistemas de grande escala}
 
-Os capítulos finais do livro (cap 14 em diante) apresentam algumas ideias interessantes sobre como lidar com grandes sistemas de software, nos quais fica difícil manter um único modelo de domínio para todas as funcionalidades. Um caso particular bastante abordado pelo o autor é a integração com sistemas legados.
+Os capítulos finais do livro \ddd são sobre técnicas especialmente úteis para sistemas grandes, que envolvem integrações diversas. Essa é uma realidade bem comum nas grandes empresas. Mas por isso mesmo, a discussão que segue pode não se aplicar para sistemas mais simples. Saiba avaliar seu caso.
 
-Embora tais técnicas sejam interessantes, não são tão essenciais quanto o início do livro, pois se trata de técnicas que não se aplicam a todos os projetos. Por isso, dependendo da sua situação (experiência e tipos de projeto com o qual trabalha), pode ser uma opção interessante em um primeiro momento ler o livro apenas até o capítulo 13. Mas vou dar aqui uma breve explanada sobre essas ideias finais do livro.
+A unificação total do modelo do domínio para um sistema grande pode não ser factível ou econômica. Divide-se assim o modelo em \emph{contextos delimitados}. A visão global da relação entre esses contextos delimitados é o \emph{mapa do contexto}. Os nomes presentes no mapa do contexto devem fazer parte da linguagem onipresente. Essa delimitação entre contextos nos ajuda a evitar problemas como conceitos duplicados e falsos cognatos. A separação entre contextos pode ter relação com a divisão de trabalho entre equipes. Obs: o contexto é algo maior que os módulos, correspondendo normalmente a sub-sistemas ou até a sistemas diferentes que possuem alguma relação entre si.
+
+%A integração contínua ajuda a manter a harmonia entre os diferentes contextos.
+
+Há várias abordagens para tratar a passagem do conceito de um contexto para outro contexto. Essa passagem pode requerer uma \emph{tradução} do conceito. Pode-se evitar a passagem de conceitos por meio da criação de um \emph{núcleo compartilhado}, que é um contexto compartilhado por diferentes sub-sistemas. Muitas vezes o núcleo compartilhado corresponde ao \emph{domínio principal} da aplicação.
+
+Um caso comum é que dois contextos delimitados tenham a relação de cliente/fornecedor, na qual o fluxo de controle flui em apenas um sentido entre os contextos. O cliente pode adotar uma abordagem \emph{conformista} e simplesmente aceitar um contexto imposto pelo fornecedor sem o isolamento de uma camada de tradução. Caso opte-se pelo mapeamento, mas o contexto fornecedor seja bem complexo e até mal desenhado, o contexto cliente pode tomar uma atitude defensiva utilizando uma \emph{camada anticorrupção} para que o modelo do cliente mantenha-se limpo. A camada anticorrupção normalmente é implementada como um conjunto de serviços. Padrões de projetos usados na camada anticorrupção: fachada e adaptadores. 
+
+O fornecedor pode expor uma \emph{linguagem publicada}, que é um contexto desenhado especialmente para ser utilizado por outros sistemas. Esse é o caso da exposição de APIs REST ou Web Services, bastante utilizados hoje em dia.
+
+Mas a integração entre sistemas é sempre cara, e por isso as vezes é melhor manter \emph{caminhos separados} e duplicar um pouco de código para manter as coisas simples e até facilitar a evolução de sistemas que, apesar de alguma semelhança, são independentes.
+
+Subdomínios coesivos, que não são centrais para seu domínio principal, e que podem servir de apoio para tantos outros domínios podem ser segregados em \emph{subdomínios genéricos}. Exemplo: princípios gerais de contabilidade, conversão de fuso-horários, etc. Não se preocupe antecipadamente com a reutilização do subdomínio genérico por outro sistema. Faça o mínimo possível para atender seu domínio. Mantenha o domínio segregado sem dependências para seu domínio principal. A vantagem de subdomínios genéricos é que eles ajudam a diminuir a sobre carga no domínio principal. Ou seja, o domínio principal fica mais simples de entender. Subdomínios genéricos podem também ter sua implementação terceirizada mais facilmente do que partes do domínios principal.
+
+Outra forma de dividir um grande sistema é com camadas. A camada A utiliza a camada B, enquanto que a camada B nem conhece a camada A. O livro fornece um exemplo genérico de divisão em camadas que pode ser adotado em diferentes sistemas. A camada de \emph{potencial} define as políticas e especificação, que são as coisas como elas deveriam ser. Exemplo: especificação da rota de um navio cargueiro. A camada de \emph{operações}, que define as coisas como elas realmente são. Exemplo: a rota já definida para um navio cargueiro. E a camada de \emph{apoio a decisões}, que possui algoritmos inteligentes que usam como insumo potencial e operações. Exemplo: geração de relatórios sobre custos baseados nas rotas de uma frota de cargueiros.
+
+TODO relação entre camadas e contextos?
+
+O autor enfatiza que a estrutura em larga escala também deve evoluir conforme o entendimento sobre o domínio se refina. A refatoração do modelo de larga escala é bem mais complicada, mas o autor julga ser um investimento necessário que irá depois facilitar as coisas.
+
+\section{Conclusão}
+
+
+
+
 
 
 
