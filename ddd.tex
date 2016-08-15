@@ -30,7 +30,7 @@
 
 \section{Introdução}
 
-Este documento é um resumo do livro ``Domain-Driven Design, Atacando as Complexidades no Coração do Software'', escrito por Eric Evans em 2003. Os objetivos deste resumo são:
+Este documento é um resumo do livro ``\ddd: Atacando as Complexidades no Coração do Software''~\cite{Evans2003DDD}. Os objetivos deste resumo são:
 
 \begin{itemize}
 \item Em primeiro lugar, fazer um exercício de fixação e assimilação de minha leitura do livro.
@@ -50,7 +50,7 @@ Outra consideração bem interessante é, pra mim, foi bem positivo ter demorado
 
 Antes de chegar ao que interessa, mais uma consideração. A abordagem de DDD, tal como apresentada no livro, é intimamente ligada à orientação a objetos (OO). Caso você ainda não domine a OO em profundamente, não se preocupe, estudar DDD é até uma boa maneira de reforçar o aprendizado em OO. Mas um alerta se faz necessário. Muitas pessoas ainda vendem a ideia de que o foco principal da OO consiste no mapeamento de entidades do mundo real para o código e a utilização de encapsulamento, herança e polimorfismo. Embora todas essas coisas estejam inclusas na OO, é mais útil considerar que o foco do OO é a decomposição do código de um sistema em unidades coesas e fracamente acopladas. Essas unidade são tanto as pequena unidades (classes), quanto as grandes unidades (pacotes). Uma consequência almejada dessa decomposição é que a manutenção do sistema fica facilitada, pois é possível encontrar rapidamente o ponto a ser alterado e a mesma alteração não precisa ser repetida em diversos pontos do código. Um ótimo livro que ajuda a passar essa ideia sobre a OO é o ``Orientação a Objetos e SOLID para Ninjas''~\cite{Aniche2015Ninjas}.
 
-Obs: \citacao{trechos nesta formatação são citações diretas do livro}.
+Obs: \citacao{trechos nesta formatação são citações diretas do livro}. Conceitos chaves do livro em \emph{itálico}. Não há separação rígida entre oq o livro diz e oq eu digo, mas maioria das afirmativas são baseadas no livro. Explicitar as duas coisas quebraria a fluidez do texto. Este não é um texto acadêmico.
 
 Obs: citações não são tão e somente pra justificar sentenças, mas mais pra indicar mais leituras ao leitor...
 
@@ -234,32 +234,31 @@ Mas antes de arregaçar as mangas e se aventurar em alterações radicais de seu
 \item Lembre-se: softwares não são somente para usuários. Eles também são para desenvolvedores, que devem manter o código.
 
 
-
 \end{itemize}
 
-\section{Sistemas de grande escala}
+\section{Modelando sistemas de grande escala}
 
-Os capítulos finais do livro \ddd são sobre técnicas especialmente úteis para sistemas grandes, que envolvem integrações diversas. Essa é uma realidade bem comum nas grandes empresas. Mas por isso mesmo, a discussão que segue pode não se aplicar para sistemas mais simples. Saiba avaliar seu caso.
+Os capítulos finais do livro \ddd são voltados para a modelagem de grandes sistemas, que envolvem integrações diversas. As discussões apresentadas nesta seção podem não se aplicar a sistemas mais simples, mas tratam de uma realidade comum em grandes empresas. Não só para esse conteúdo, mas para qualquer recomendação de design, saiba avaliar o que se aplica à sua situação específica.
 
-A unificação total do modelo do domínio para um sistema grande pode não ser factível ou econômica. Divide-se assim o modelo em \emph{contextos delimitados}. A visão global da relação entre esses contextos delimitados é o \emph{mapa do contexto}. Os nomes presentes no mapa do contexto devem fazer parte da linguagem onipresente. Essa delimitação entre contextos nos ajuda a evitar problemas como conceitos duplicados e falsos cognatos. A separação entre contextos pode ter relação com a divisão de trabalho entre equipes. Obs: o contexto é algo maior que os módulos, correspondendo normalmente a sub-sistemas ou até a sistemas diferentes que possuem alguma relação entre si.
+A unificação total do modelo do domínio para um sistema grande pode não ser factível ou econômica. Divide-se assim o modelo em \emph{contextos delimitados}. Um contexto delimitado é algo maior que os módulos, correspondendo normalmente a sub-sistemas ou até a sistemas diferentes que possuem alguma relação entre si. A visão global da relação entre esses contextos delimitados é o \emph{mapa do contexto}. Os nomes presentes no mapa do contexto devem fazer parte da linguagem onipresente. Essa delimitação entre contextos nos ajuda a evitar problemas como conceitos duplicados e falsos cognatos. A separação entre contextos pode ter relação com a divisão de trabalho entre equipes. 
 
-%A integração contínua ajuda a manter a harmonia entre os diferentes contextos.
+Há várias abordagens para tratar a passagem conceitos de um contexto para outro contexto. Essa passagem pode requerer a \emph{tradução} de conceitos. Pode-se evitar a passagem de conceitos por meio da criação de um \emph{núcleo compartilhado}, que é um contexto compartilhado por diferentes sub-sistemas. Muitas vezes o núcleo compartilhado corresponde ao \emph{domínio principal} da aplicação.
 
-Há várias abordagens para tratar a passagem do conceito de um contexto para outro contexto. Essa passagem pode requerer uma \emph{tradução} do conceito. Pode-se evitar a passagem de conceitos por meio da criação de um \emph{núcleo compartilhado}, que é um contexto compartilhado por diferentes sub-sistemas. Muitas vezes o núcleo compartilhado corresponde ao \emph{domínio principal} da aplicação.
-
-Um caso comum é que dois contextos delimitados tenham a relação de cliente/fornecedor, na qual o fluxo de controle flui em apenas um sentido entre os contextos. O cliente pode adotar uma abordagem \emph{conformista} e simplesmente aceitar um contexto imposto pelo fornecedor sem o isolamento de uma camada de tradução. Caso opte-se pelo mapeamento, mas o contexto fornecedor seja bem complexo e até mal desenhado, o contexto cliente pode tomar uma atitude defensiva utilizando uma \emph{camada anticorrupção} para que o modelo do cliente mantenha-se limpo. A camada anticorrupção normalmente é implementada como um conjunto de serviços. Padrões de projetos usados na camada anticorrupção: fachada e adaptadores. 
+Um caso comum é que dois contextos delimitados tenham a relação de cliente/fornecedor, na qual o fluxo de controle flui em apenas um sentido entre os contextos. O cliente pode adotar uma abordagem \emph{conformista}, aceitando um contexto imposto pelo fornecedor sem o isolamento de uma camada de tradução. Caso opte-se pela tradução, mas o contexto fornecedor seja muito complicado e até mal desenhado, o contexto cliente pode tomar uma atitude defensiva utilizando uma \emph{camada anticorrupção} para que o modelo do cliente mantenha-se limpo. A camada anticorrupção normalmente é implementada como um conjunto de serviços. Padrões de projetos usados na camada anticorrupção são a \emph{fachada} e \emph{adaptadores}. 
 
 O fornecedor pode expor uma \emph{linguagem publicada}, que é um contexto desenhado especialmente para ser utilizado por outros sistemas. Esse é o caso da exposição de APIs REST ou Web Services, bastante utilizados hoje em dia.
 
 Mas a integração entre sistemas é sempre cara, e por isso as vezes é melhor manter \emph{caminhos separados} e duplicar um pouco de código para manter as coisas simples e até facilitar a evolução de sistemas que, apesar de alguma semelhança, são independentes.
 
-Subdomínios coesivos, que não são centrais para seu domínio principal, e que podem servir de apoio para tantos outros domínios podem ser segregados em \emph{subdomínios genéricos}. Exemplo: princípios gerais de contabilidade, conversão de fuso-horários, etc. Não se preocupe antecipadamente com a reutilização do subdomínio genérico por outro sistema. Faça o mínimo possível para atender seu domínio. Mantenha o domínio segregado sem dependências para seu domínio principal. A vantagem de subdomínios genéricos é que eles ajudam a diminuir a sobre carga no domínio principal. Ou seja, o domínio principal fica mais simples de entender. Subdomínios genéricos podem também ter sua implementação terceirizada mais facilmente do que partes do domínios principal.
+Subdomínios coesos que não são centrais para seu domínio principal e que podem servir de apoio para outros domínios podem ser segregados em \emph{subdomínios genéricos}. Exemplo: princípios gerais de contabilidade, conversão de fuso-horários, etc. Não se preocupe antecipadamente com a reutilização do subdomínio genérico por outro sistema. Faça o mínimo possível para resolver o seu problema. Mantenha o domínio segregado sem dependências para seu domínio principal. Subdomínios genéricos ajudam a diminuir a sobrecarga no domínio principal. Ou seja, fica mais simples de entender o domínio principal. Subdomínios genéricos podem também ter sua implementação terceirizada mais facilmente do que partes do domínios principal.
 
-Outra forma de dividir um grande sistema é com camadas. A camada A utiliza a camada B, enquanto que a camada B nem conhece a camada A. O livro fornece um exemplo genérico de divisão em camadas que pode ser adotado em diferentes sistemas. A camada de \emph{potencial} define as políticas e especificação, que são as coisas como elas deveriam ser. Exemplo: especificação da rota de um navio cargueiro. A camada de \emph{operações}, que define as coisas como elas realmente são. Exemplo: a rota já definida para um navio cargueiro. E a camada de \emph{apoio a decisões}, que possui algoritmos inteligentes que usam como insumo potencial e operações. Exemplo: geração de relatórios sobre custos baseados nas rotas de uma frota de cargueiros.
+Seja qual for a estratégia para gerenciar múltiplos contextos delimitados, a \emph{integração contínua} ajuda a manter a harmonia entre os diferentes contextos. Testes automatizados executados continuamente em um ambiente neutro fortalecem a garantia de consistência entre os contextos. Assim, a integração contínua funciona como uma forma de comunicação eficiente para alertar caso alterações que uma equipe faça em um contexto tenha impactos negativos em algum contexto mantido por outra equipe.
+
+Pode-se também dividir um sistema em \emph{camadas}. A camada A utiliza a camada B, enquanto que a camada B nem conhece a camada A. O livro fornece um exemplo genérico de divisão em camadas que pode ser adotado em diferentes sistemas. A camada de \emph{potencial} define políticas e especificações, que são as coisas como elas deveriam ser. Exemplo: especificação da rota de um navio cargueiro. A camada de \emph{operações} corresponde ao estado das coisas como elas realmente estão. Exemplo: a rota já definida para um navio cargueiro. E a camada de \emph{apoio a decisões} possui algoritmos inteligentes que usam como insumo as camadas de potencial e de operações. Exemplo: geração de relatórios sobre custos baseados nas rotas de uma frota de cargueiros.
 
 TODO relação entre camadas e contextos?
 
-O autor enfatiza que a estrutura em larga escala também deve evoluir conforme o entendimento sobre o domínio se refina. A refatoração do modelo de larga escala é bem mais complicada, mas o autor julga ser um investimento necessário que irá depois facilitar as coisas.
+O autor enfatiza que a estrutura em grande escala também deve evoluir conforme o entendimento sobre o domínio é refinado. A refatoração do modelo de grande escala é bem mais complicada, mas o autor julga ser um investimento necessário para que o modelo possa continuar evoluindo de forma saudável.
 
 \section{Conclusão}
 
