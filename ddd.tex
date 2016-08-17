@@ -4,9 +4,15 @@
 \usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} % para as margens
 \usepackage{graphicx} 
 \usepackage{alltt} 
-\usepackage[hidelinks]{hyperref} 
+%\usepackage[hidelinks]{hyperref} 
+\usepackage{hyperref} 
 \usepackage{xspace}
 \usepackage{listings}
+
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+}
 
 \hyphenation{booleano}
 
@@ -26,7 +32,7 @@
 
 \section{Introdução}
 
-Este documento é um compilado de notas de leitura sobre o livro ``\ddd: Atacando as Complexidades no Coração do Software''~\cite{Evans2003DDD}. Conjuntamente com os princípios SOLID\footnote{\url{https://en.wikipedia.org/wiki/SOLID_\%28object-oriented_design\%29}}, padrões de projetos, escrita de código limpo e desenvolvimento dirigido por testes, considero o Domain-Driven Design (DDD) uma das grande práticas para que o desenvolvedor faça um uso mais correto e proveitoso do paradigma de orientação a objetos. Os objetivos deste documento são:
+Este documento é um compilado de notas de leitura sobre o livro ``\ddd: Atacando as Complexidades no Coração do Software''~\cite{Evans2003DDD}. O DDD, design dirigido pelo domínio, é uma abordagem de desenvolvimento de software voltado para domínios complexos. No DDD, a implementação do software corresponde a um modelo rico do domínio. Conjuntamente com os princípios SOLID\footnote{\url{https://en.wikipedia.org/wiki/SOLID_\%28object-oriented_design\%29}}, padrões de projetos, escrita de código limpo e desenvolvimento dirigido por testes, considero o DDD uma das grande práticas para que o desenvolvedor faça um uso mais correto e proveitoso do paradigma de orientação a objetos. Os objetivos deste documento são:
 
 \begin{itemize}
 \item Ser um exercício pessoal de fixação e assimilação de minha leitura do livro.
@@ -242,9 +248,9 @@ Subdomínios coesos que não são centrais para seu domínio principal e que pod
 
 Seja qual for a estratégia para gerenciar múltiplos contextos delimitados, a \emph{integração contínua} ajuda a manter a harmonia entre os diferentes contextos. Testes automatizados executados continuamente em um ambiente neutro fortalecem a garantia de consistência entre os contextos. Assim, a integração contínua funciona como uma forma de comunicação eficiente para alertar caso alterações que uma equipe faça em um contexto tenha impactos negativos em algum contexto mantido por outra equipe.
 
-Pode-se também dividir um sistema em \emph{camadas}. A camada A utiliza a camada B, enquanto que a camada B nem conhece a camada A. O livro fornece um exemplo genérico de divisão em camadas que pode ser adotado em diferentes sistemas. A camada de \emph{potencial} define políticas e especificações, que são as coisas como elas deveriam ser. Exemplo: especificação da rota de um navio cargueiro. A camada de \emph{operações} corresponde ao estado das coisas como elas realmente estão. Exemplo: a rota já definida para um navio cargueiro. E a camada de \emph{apoio a decisões} possui algoritmos inteligentes que usam como insumo as camadas de potencial e de operações. Exemplo: geração de relatórios sobre custos baseados nas rotas de uma frota de cargueiros.
+Pode-se também melhor organizar um contexto dividindo-o em \emph{camadas}. A camada A utiliza a camada B, enquanto que a camada B nem conhece a camada A. O livro fornece um exemplo genérico de divisão em camadas que pode ser adotado em diferentes sistemas. A camada de \emph{potencial} define políticas e especificações, que são as coisas como elas deveriam ser. Exemplo: especificação da rota de um navio cargueiro. A camada de \emph{operações} corresponde ao estado das coisas como elas realmente estão. Exemplo: a rota já definida para um navio cargueiro. E a camada de \emph{apoio a decisões} possui algoritmos inteligentes que usam como insumo as camadas de potencial e de operações. Exemplo: geração de relatórios sobre custos baseados nas rotas de uma frota de cargueiros.
 
-TODO relação entre camadas e contextos?
+Embora o uso comum do padrão de camadas seja dividir um único contexto em camadas, as camadas podem ser usadas de forma mais flexível. É possível que uma camada atravesse contextos delimitados. Pode ser que as camadas forneçam uma visão de super alto nível que organize o mapa de contexto. No livro temos um exemplo de transporte de carga com os contextos ``reservas'' e ``rede de transporte'' dentro da camada de operações e o contexto ``programação de transporte'' dentro da camada potencial.
 
 O autor enfatiza que a estrutura em grande escala também deve evoluir conforme o entendimento sobre o domínio é refinado. A refatoração do modelo de grande escala é bem mais complicada, mas o autor julga ser um investimento necessário para que o modelo possa continuar evoluindo de forma saudável.
 
