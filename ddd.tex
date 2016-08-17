@@ -15,46 +15,34 @@
 \newcommand{\lgg}{linguagem onipresente\xspace}
 \newcommand{\ddd}{\emph{Domain Driven Design}\xspace}
 
-\title{Notas sobre o livro ``Domain-Driven Design''}
+\title{Notas sobre o livro Domain-Driven Design}
 \author{Leonardo Leite}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
-\textbf{Atenção: } este documento trata-se ainda de uma versão em desenvolvimento.
-\end{abstract}
-
-
+\citacao{A principal finalidade de um software é servir aos usuários. Mas, primeiro, esse mesmo software tem que servir aos desenvolvedores}.
 
 \section{Introdução}
 
-Este documento é um resumo do livro ``\ddd: Atacando as Complexidades no Coração do Software''~\cite{Evans2003DDD}. Os objetivos deste resumo são:
+Este documento é um compilado de notas de leitura sobre o livro ``\ddd: Atacando as Complexidades no Coração do Software''~\cite{Evans2003DDD}. Os objetivos deste documento são:
 
 \begin{itemize}
-\item Em primeiro lugar, fazer um exercício de fixação e assimilação de minha leitura do livro.
-\item Servir de referência rápida para que eu tente aplicar os conceitos do DDD no desenvolvimento de software.
-\item Fornecer a outras pessoas uma ideia rápida sobre o que trata o livro Domain-Driven Design, assim como apresentar alguns de seus principais conceitos.
+\item Ser um exercício pessoal de fixação e assimilação de minha leitura do livro.
+\item Ser uma referência rápida sobre DDD para utilização durante o desenvolvimento de software.
+\item Fornecer uma visão geral sobre o livro \ddd para outras pessoas.
 \end{itemize}
 
-Uma consideração importante ao leitor: embora minha prática do desenvolvimento de software já tenha vários pontos de acordo com o DDD, este resumo foi escrito logo após minha leitura do livro. Ou seja, não se trata de um texto baseado em minha experiência com DDD, mas somente na leitura do livro.
+Este texto foi escrito logo após minha leitura do livro. Logo, o texto não se baseia em minha experiência pessoal aplicando o DDD na prática. A grande maioria das afirmativas deste texto são baseados no livro sobre DDD de Eric Evans. Contudo, faz também parte do texto algumas afirmativas baseadas em minha experiência pessoal como desenvolvedor de software. Como esse não é um texto acadêmico, não priorizei separar claramente minhas afirmativas das afirmativas do livro, para não quebrar a fluidez do texto. Contudo, \citacao{textos entre aspas nesta formatação são citações diretas do livro, a menos que outra fonte esteja sendo citada}. A motivação para a citação de outas fontes é mais para servir de sugestão de boas leituras do que para justificar as afirmativas do texto. Conceitos chaves do livro de Evans estão em \emph{itálico}.
 
-Destaco também que o livro que eu li foi a primeira edição da tradução para o português (2009). Aliás, uma tradução não tão boa. O pior exemplo de tradução que achei foi a tradução de \emph{graphs} (grafos) e \emph{edges} (arestas) respectivamente por gráficos e bordas. Não sei dizer se a tradução em si foi melhorada na segunda edição da tradução (2011).
+A edição do livro que utilizei foi a primeira edição da tradução para o português (2009). Aliás, uma tradução não tão boa. O pior exemplo de tradução que achei foi a tradução de \emph{graphs} (grafos) e \emph{edges} (arestas) respectivamente por gráficos e bordas. Não sei dizer se a tradução em si foi melhorada na segunda edição da tradução (2011). Na dúvida, sugiro a leitura do original em inglês.
 
-Minha impressão geral sobre o livro: gostei bastante da mentalidade do autor, bem condizente com princípios da Programação Extrema (XP) e ao mesmo tempo com uma boa dose de pragmatismo. No entanto o livro é um tanto quanto grande e verboso. Embora seja definitivamente um clássico, já é relativamente antigo (2003). Dessa forma, acho que talvez possam existir por aí livros mais resumidos que possam transmitir a essência do DDD sem tantas considerações e mais direto ao ponto considerando o atual estado-da-arte do desenvolvimento de software. Não que o livro tenha deixado de ser atual, mas algumas considerações menores poderiam hoje ser deixadas de lado. Ao mesmo tempo, já surgiram alguns paradigmas modernosos como \emph{micro-serviços}, que são bem relacionados com o tema do livro. Portanto, sua decisão de ler ou não o livro vai depender bastante do quanto você deseja se aprofundar no assunto.
+O livro de Evans é um clássico da literatura sobre desenvolvimento de software, endossado por grandes nomes como Martin Fowler. Evans apresenta ao longo do livro uma mentalidade alinhada com os princípios da Programação Extrema (XP) e ao mesmo tempo uma boa dose de pragmatismo. No entanto, o livro é um tanto grande e verboso. O livro já é também relativamente antigo (2003), o que inclui no livro algumas considerações hoje já não tão importantes, e deixa de fora alguns tópicos atuais relacionados ao tema do livro, como \emph{micro-serviços}\footnote{\url{http://martinfowler.com/articles/microservices.html}}. Dito isso, você pode querer considerar ler outros livros sobre DDD que não o clássico original sobre o qual escrevo.
 
-Outra consideração bem interessante é, pra mim, foi bem positivo ter demorado pra ler esse livro. Já tinha ouvido falar do livro há alguns anos, mas somente agora finalmente o priorizei. E isso foi bom porque a experiência recente que eu tive desenvolvendo um sistema com um complicado modelo de domínio me ajudou bastante a ler o livro com melhor proveito. Outros sistemas em que trabalhara antes não tinham um modelo de domínio assim tão complexo. Ler o livro e comparar o que o autor descreve com suas próprias experiências é de grande valor para uma melhor leitura do livro. Dessa forma, dou a ousada sugestão de que se você ainda é um desenvolvedor iniciante leia apenas um livro básico (ou mesmo esse resumo) sobre o assunto e espere alguns anos até ler o livro Domain-Driven Design.
+Já fazia alguns anos que eu queria ler esse livro. Mas essa demora em ler o livro foi positiva. Atualmente trabalho como desenvolvedor de software do governo federal, e modelos de domínios da área governamental costumam ser bem complexos. Dessa forma, minha experiência recente me deu mais embasamento para melhor aproveitar a leitura do livro. Tentar contextualizar os conceitos e exemplos do livro em sua experiência é um exercício muito valioso. Dessa forma, dou a ousada sugestão de que se você ainda é um desenvolvedor iniciante leia por ora apenas um livro básico sobre DDD (ou mesmo este resumo ;) e espere alguns anos até ler o clássico \ddd.
 
-\citacao{A principal finalidade de um software é servir aos usuários. Mas, primeiro, esse mesmo software tem que servir aos desenvolvedores}.
-
-Antes de chegar ao que interessa, mais uma consideração. A abordagem de DDD, tal como apresentada no livro, é intimamente ligada à orientação a objetos (OO). Caso você ainda não domine a OO em profundamente, não se preocupe, estudar DDD é até uma boa maneira de reforçar o aprendizado em OO. Mas um alerta se faz necessário. Muitas pessoas ainda vendem a ideia de que o foco principal da OO consiste no mapeamento de entidades do mundo real para o código e a utilização de encapsulamento, herança e polimorfismo. Embora todas essas coisas estejam inclusas na OO, é mais útil considerar que o foco do OO é a decomposição do código de um sistema em unidades coesas e fracamente acopladas. Essas unidade são tanto as pequena unidades (classes), quanto as grandes unidades (pacotes). Uma consequência almejada dessa decomposição é que a manutenção do sistema fica facilitada, pois é possível encontrar rapidamente o ponto a ser alterado e a mesma alteração não precisa ser repetida em diversos pontos do código. Um ótimo livro que ajuda a passar essa ideia sobre a OO é o ``Orientação a Objetos e SOLID para Ninjas''~\cite{Aniche2015Ninjas}.
-
-Obs: \citacao{trechos nesta formatação são citações diretas do livro}. Conceitos chaves do livro em \emph{itálico}. Não há separação rígida entre oq o livro diz e oq eu digo, mas maioria das afirmativas são baseadas no livro. Explicitar as duas coisas quebraria a fluidez do texto. Este não é um texto acadêmico.
-
-Obs: citações não são tão e somente pra justificar sentenças, mas mais pra indicar mais leituras ao leitor...
-
-Bom, chega de enrolação. Vamos ao que interessa...
+A abordagem de DDD é intimamente ligada à orientação a objetos (OO). Caso você ainda não domine a OO em profundamente, não pare aqui por causa disso. Estudar DDD é uma boa maneira de ampliar seu entendimento sobre a OO. Mas um alerta se faz necessário. Muitas pessoas entendem que o foco principal da OO consiste no mapeamento de entidades do mundo real para o código com o apoio de encapsulamento, herança e polimorfismo. Embora todas essas coisas estejam inclusas na OO, é mais útil considerar que o foco do OO é a decomposição de um sistema em unidades coesas e fracamente acopladas. Essas unidade são tanto as pequena unidades (classes), quanto as grandes unidades (pacotes). Uma consequência desejada dessa decomposição é facilitar a manutenção do sistema. Usando bem a OO é possível encontrar rapidamente o ponto a ser alterado. Além disso, essa mesma alteração não precisa ser repetida em diversos pontos do código. Um ótimo livro que ajuda a passar essa visão mais avançada sobre a OO é o ``Orientação a Objetos e SOLID para Ninjas''~\cite{Aniche2015Ninjas}.
 
 \section{O modelo do domínio de um software}
 
@@ -127,9 +115,9 @@ Contudo, ainda há controvérsias... No livro Clean Code, Uncle Bob faz uma dist
 
 Essa solução no fundo vai de encontro à recomendação geral de não expor publicamente todos os dados de uma entidade. Mas forçar essa separação da entidade em classes diferentes parece um tanto burocrático e cair no caso criticado por Evans, no qual há uma separação da entidade conceitual em diferentes objetos, sendo um para manter a estrutura de dados e o outro as regras de negócio da entidade.
 
-Para concluir a controvérsia, minha posição neste momento é de que a postura mais equilibrada parece ser implementar suas entidades como classes contendo os dados da entidade nos atributos e as regras de negócio em métodos públicos, mas evitando a publicização desnecessária dos dados da entidade. Em Java isso seria não criar \emph{getters} e \emph{setters} desnecessariamente. Uma posição similar pode ser depreendida do post ``Como não aprender Java e Orientação a Objetos: getters e setters''\footnote{\url{http://blog.caelum.com.br/nao-aprender-oo-getters-e-setters/}}. Mas essa é uma discussão pra lá de complicada!
+Para concluir a controvérsia, minha posição neste momento é de que a postura mais equilibrada parece ser implementar suas entidades como classes contendo os dados da entidade nos atributos e as regras de negócio em métodos públicos, mas evitando a publicização desnecessária dos dados da entidade. Em Java isso seria não criar \emph{getters} e \emph{setters} desnecessariamente. Uma posição similar pode ser depreendida do post ``Como não aprender Java e Orientação a Objetos: getters e setters''\footnote{\url{http://blog.caelum.com.br/nao-aprender-oo-getters-e-setters/}}. Já para Python utilizando Active Record, ainda não estou tão certo, uma vez que a questão da visibilidade dos atributos do objeto é bem mais sutil. 
 
-
+Essa é uma discussão pra lá de complicada! Caso você tenha sua opinião, eu ficaria feliz em ouvi-la.
 
 \section{Padrões do ciclo de vida de um objeto do domínio}
 
